@@ -1,0 +1,350 @@
+2017-6-26 laravel项目实战之项目分析
+=========================================================
+今日学习
+
+1、电商网站类型
+	1、B2B2C 平台型
+		京东、淘宝
+
+	2、B2C 企业对个人
+		小米、华威、OPPO
+
+	3、B2B 企业对企业
+		阿里妈妈
+
+	4、C2C 个人对个人
+		闲鱼、空空狐
+
+
+2、做什么类型网站？
+	B2C
+
+3、开发网站
+	1、产品经理
+		a) 需求分析
+		b) 流程设计
+		c) 商业模式
+
+	2、UI和UE
+		设计出页面
+
+	3、DBA(数据库专员)
+		设计数据库
+
+	4、前端工程师(web前端)
+		完成页面
+
+	5、后端工程师(PHP、Java)
+		实现后台功能同时实现前台页面
+
+	6、测试人员
+		压力测试、黑盒测试、白盒测试
+
+	7、运维人员
+		网站上线
+
+	8、运营人员
+		维护网站
+
+
+
+4、需求分析
+	1、前台页面
+		a)首页
+
+
+		b) 商品详情页面
+
+
+		c)商品结算页面
+
+
+		b)购物车页面
+
+
+		e) 订单生成页面
+
+
+		f) 商品分类页面
+
+
+		g) 搜索页面
+
+
+		h) 登录和注册页面
+
+
+		i) 找回密码页面
+
+
+		u) 个人中心
+			我的订单
+			我的评论
+			个人信息
+			收获地址
+			修改密码
+
+	2、后台页面
+		1、登录页面
+
+		2、后台展示页面
+
+
+5、功能分析
+	1、前台
+		a)首页
+			轮播图
+
+			分类展示
+
+			广告展示
+
+			明星单品
+
+			楼层的展示
+
+		b) 商品详情页面
+			1、商品的大图和小图
+
+			2、商品详情
+
+			3、商品配置信息
+
+			4、商品的评论
+
+
+		c)商品结算页面
+			1、ajax收货地址
+
+			2、商品的基本信息
+
+
+		b) 购物车页面
+			1、全选全不选
+
+			2、ajax数量修改
+
+			3、ajax删除
+
+
+		e) 订单生成页面
+
+
+		f) 商品分类页面
+			1、选择
+
+		g) 搜索页面
+
+
+		h) 登录和注册页面
+			1、注册功能(手机登录和注册)
+
+
+			2、登录功能(手机登录和注册)
+
+
+		i) 找回密码页面
+			1、通过邮箱给大家实现注册和找回密码
+
+
+		u) 个人中心
+			个人中心首页
+				个人基本信息
+			我的订单
+				用户购买的订单
+			我的评论
+				用户评论
+			个人信息
+				用户的基本信息
+			收获地址
+				用户收货地址
+			修改密码
+				修改密码
+
+
+	2、后台功能
+		后台主要对前台进行管理
+
+		1、管理员管理
+
+		2、网站用户管理
+
+		3、轮播图管理
+
+		4、分类管理
+
+		5、分类的广告
+
+		6、网站广告
+
+		7、商品管理
+
+		8、网站基本信息管理
+
+		9、评论管理
+
+		10、收货地址管理
+
+		11、订单管理
+
+
+6、数据库设计
+	1、管理员表-admin
+		id
+		name
+		pass
+		time
+		lasttime
+		count
+		status
+
+	2、用户表-user
+		id	
+		email
+		pass
+		tel
+		status
+		time
+		token 主要为了网站安全
+		aid 设置用户默认地址
+
+	3、用户信息表- userInfo
+		id  主键、自增、无符号
+		uid 唯一
+		nickname
+		sex
+		birthday
+		addr
+		addrInfo
+		img
+
+	4、轮播图管理-slider
+		id
+		img
+		order
+		title
+		href
+
+	5、分类管理-types
+		id
+		name  分类名
+		pid   父ID
+		path  path路径
+		sort  排序
+		is_lou  是否楼层
+		title
+		keywords
+		description
+
+
+	6、分类广告-typeAds
+		id
+		cid
+		img
+		type 分类广告类型 大图和小图
+		title 
+
+	7、广告管理-ads
+		id
+		img
+		sort
+		href
+		title
+
+	8、商品管理-goods
+		id
+		cid 所属分类
+		title 商品标题
+		info 商品简介
+		img 商品图片
+		price 商品价格
+		num 商品的库存
+		text 商品的详细信息
+		config 商品的配置信息
+
+	9、商品小图表-goodsImg
+		id
+		gid
+		img
+
+	10、网站配置-一般通过数据库进行设置
+
+	11、评论管理-comment
+		张三评论商品1
+
+		id
+		uid   用户ID
+		gid   商品ID
+		text  评论内容
+		start  评论星级
+		time   评论时间
+		statu
+		img  
+
+
+	12、收货地址-addr
+		id
+		uid
+		sname
+		stel
+		addr
+		addrInfo
+		email
+
+
+	13、订单表-orders
+		id
+		code  订单编号
+		uid   购买者
+		gid   商品
+		price 价格
+		num   商品数量
+		aid	  收货地址
+		time  购买时间
+		money 支付状态
+		sid 订单状态
+
+	14、订单状态表-orderStatu
+		id
+		name
+
+7、定项目名和数据库名
+	1、项目名 lenovo 商城
+
+		1、composer create-project laravel/laravel lenovo --prefer-dist "5.3.*"
+
+		2、配置域名
+			C:\Windows\System32\drivers\etc\hosts
+
+			127.0.0.1       www.lianxiang.com
+
+		3、修改apache配置
+			C:\AppServ\Apache24\conf\extra\httpd-vhosts.conf
+
+			<VirtualHost *:80>
+			    DocumentRoot "D:/laravel/yzmedu/lenovo/public"
+			    ServerName www.lianxiang.com
+			    <Directory "D:/laravel/yzmedu/lenovo/public">
+			       
+			        Options Indexes FollowSymLinks
+			        
+			        AllowOverride All
+
+			        Require all granted
+			    </Directory>
+			</VirtualHost>
+
+		4、重启服务
+			
+
+	2、数据库名
+		lenovo
+
+
+
+
+
+
+
+
+

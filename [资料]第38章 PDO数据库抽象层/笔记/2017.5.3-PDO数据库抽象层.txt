@@ -1,0 +1,107 @@
+2017.5.3-PDO数据库抽象层
+
+上次复习:
+------------------------------------------
+1.PHP命名空间
+
+今天内容:
+------------------------------------------
+PDO(PHP Data Object-php数据对象):
+#数据库抽象层
+#PHP用来操作数据库
+
+php如何开启pdo模块(mysql):
+1.文件php.ini
+2.打开mysql和oracle模块
+extension=php_pdo_mysql.dll
+extension=php_pdo_oci.dll
+3.重启apache
+4.查看phpinfo
+
+PDO学习大纲:
+1.pdo类
+PDO class 
+
+2.预处理类
+PDOStatement class
+
+3.异常处理类
+PDOException class
+
+pdo操作mysql:(PDO_MYSQL DSN)
+#PDO_MYSQL Data Source Name(数据源名称)
+$pdo=new PDO('mysql:host=localhost;dbname=yzmedu','root','123');
+
+百度静态资源公共库:
+http://cdn.code.baidu.com/
+
+pdo连接数据库:
+$pdo=new PDO('mysql:host=localhost;dbname=yzmedu','root','123');
+
+pdo设置客户端字符集:
+$pdo->exec('set names utf8');
+
+组装sql语句:
+$sql="select * from user";
+
+把sql发到mysql服务器，mysql服务器返回结果集(预处理对象):
+$smt=$pdo->query($sql);
+
+从预处理对象中获取数据:
+$rows=$smt->fetchAll(PDO::FETCH_ASSOC);
+
+pdo类常用方法:
+• exec()
+• query()
+• lastInsertId()
+• setAttribute()
+
+pdo实现事务机制:
+• beginTransaction()
+• commit()
+• rollback()
+
+statement类常用方法:
+• bindParam()
+• bindValue()
+• columnCount()
+• fetch()
+• fetchAll()
+• fetchColumn()
+• rowCount()
+• execute()
+
+PDOException异常处理类:
+• getMessage()
+• getCode()
+• getLine()
+
+事务机制:
+1.事件中所有任务都成功
+1)开启事件
+2)一件事件由多个任务组成，如果所有任务都成功则该事件完成，接着提交该事件
+3)结束事件；
+
+2.事件中有一个任务失败
+1)开启事件
+2)一件事件由多个任务组成，其中有一个任务失败则该事件完成，接着回滚该事件
+3)结束事件；
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

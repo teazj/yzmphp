@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>index</title>
+</head>
+<body>
+	<table width='1000px' border='1px' cellspacing='0'>
+		<tr>
+			<th>编号</th>
+			<th>用户名</th>
+			<th>班级</th>
+			<th>得分</th>
+		</tr>
+		<volist name='rows' id='row'>
+			<tr>
+				<td>{$row['id']}</td>
+				<td>{$row['username']}</td>
+				<td>{$row['class_id']}</td>
+				<td>{$row['score']}</td>
+			</tr>
+		</volist>
+	</table>
+</body>
+</html>

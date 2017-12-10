@@ -1,0 +1,183 @@
+2017.3.30-数据库设计
+
+上次复习:
+---------------------------------------------------
+1.文件上传
+2.多文件上传
+3.文件下载
+
+今天内容:
+---------------------------------------------------
+数据库:
+1.设计
+1)服务器管理
+2)数据库管理
+3)表管理
+4)字段管理
+5)索引管理
+
+2.操作
+1)sql语句
+2)单表操作
+3)多表操作
+
+myisam表引擎:
+1.user.frm
+#表字段
+
+2.user.myd
+#表数据
+
+3.user.myi
+#表索引
+
+innodb表引擎:
+1.user.frm
+#表字段
+
+2.user.idb
+#表索引+部分表数据
+
+3.ibdata1
+#所有数据库中的所有表共享存储文件
+
+Mysql基本命令:
+1.关闭mysql
+net stop mysql57
+
+2.开启mysql
+net start mysql57
+
+3.登录mysql
+mysql -uroot -p12345678
+
+4.登录mysql直接进入yzmedu数据库
+mysql -uroot -p1234578 yzmedu
+
+5.查看数据库
+show databases;
+
+6.进入数据库
+use yzmedu;
+
+7.查看所有表
+show tables;
+
+8.创建user表
+mysql> create table user(
+    -> id int,
+    -> username varchar(50),
+    -> password varchar(50)
+    -> );
+
+9.查看表结构
+desc user;
+
+10.查看表数据
+select * from user;
++------+----------+----------+
+| id   | username | password |
++------+----------+----------+
+|    1 | user1    | 123      |
+|    2 | user2    | 123      |
+|    3 | user3    | 123      |
+|    4 | user4    | 123      |
+|    5 | user5    | 123      |
++------+----------+----------+
+
+11.往user表中插入数据
+insert into user(id,username,password) values(1,'user1','123');
+
+12.退出mysql
+exit;
+
+数据库操作:
+1.创建数据库
+create database test;
+
+2.删除数据库
+drop database test;
+
+3.查看数据库
+show databases;
+
+表操作:
+1.创建表
+mysql> create table user(
+    -> id int,
+    -> username varchar(50),
+    -> password varchar(50)
+    -> );
+
+2.修改表名
+rename table user to user2;
+
+3.删除表
+drop table user;
+
+mysql数据库设计篇:
+1.数据表引擎
+2.表字段类型
+3.数据字段属性
+4.mysql服务器默认字符集
+5.索引管理
+
+数据表引擎:
+1.myisam
+2.innodb
+
+表字段类型:
+1.数值
+1)tinyint
+a.有符号
+-128到+127
+
+b.无符号
+0到255
+
+2)smallint
+a.有符号
+-32768到32767
+
+b.无符号
+0-65535
+
+3)mediumint
+a.有符号
+-8388608到8388607
+
+b.无符号
+0-16777215
+
+4)int
+a.有符号
+-2147483648到2147483647
+
+b.无符号
+0-4294967295
+
+5)bigint
+a.有符号
+-9223372036854775808到9223372036854775807
+
+b.无符号
+0-18446744073709551615
+
+2.字符串
+1)char
+2)varchar
+3)text
+
+3.日期时间
+int
+
+
+
+
+
+
+
+
+
+
+

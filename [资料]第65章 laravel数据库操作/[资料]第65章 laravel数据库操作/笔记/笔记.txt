@@ -1,0 +1,98 @@
+2017-6-21 laravel 数据库操作
+------------------------------------------------------------------
+上次复习
+
+1、Ajax
+
+2、[无刷新删除]
+3、[无刷新批量删除]
+4、[无刷新排序]
+
+
+------------------------------------------------------------------
+今日学习
+
+1、图片的修改
+
+
+2、无刷新的分页
+	1、分页的原理 limit
+		1  0,3
+ 		2  3,3
+		3  6,3
+
+
+
+3、连贯操作
+	1、select();
+		执行查询语句
+	2、delete
+		执行删除语句
+
+	3、update
+		执行更新语句
+
+	4、insert();
+		执行插入语句
+
+	5、table();
+		切换数据表
+
+	6、get();
+		查询所有数据
+
+	7、where();
+		\DB::table("user")->where("id",'=',3)->first();
+		\DB::table("user")->where("id",3)->first();
+		\DB::table("user")->where("id",'>',5)->get();
+		\DB::table("user")->where("id",'<',5)->get();
+		\DB::table("user")->where([['id','>=',2],['id','<=',5]])->get();
+		\DB::table("user")->where([['name','like','%2%'],['id','<=',15]])->get();
+        \DB::table("User")->where("name","like","%2%")->orwhere("pass",'=','123')->get();
+
+
+
+
+
+	8、first();
+		所有结果中取出第一条
+
+	9、find(1);
+		发现ID是1的数据
+
+	10、whereBetween 和 whereNotBetween
+		$data=\DB::table("User")->whereBetween('id',[10,15])->get();
+        $data=\DB::table("User")->whereNotBetween('id',[10,15])->get();
+
+    11、whereIn 和 whereNotIn
+    	$data=\DB::table("User")->whereIn("id",[2,5,12,15])->get();
+    	$data=\DB::table("User")->whereNotIn("id",[2,5,12,15])->get();
+
+    12、whereNull 和 whereNotNull
+    	$data=\DB::table("User")->whereNull("pass")->get();
+    	$data=\DB::table("User")->whereNotNull("pass")->get();
+
+    13、value();
+    	#取出一行数据中的一个字段
+
+    	\DB::table("User")->where("id",2)->value('name');
+
+    14、pluck();
+    	#取出一列数据
+	 	$data=\DB::table("User")->pluck('name');
+
+	15、聚合
+		echo DB::table("User")->count();
+		echo DB::table("User")->max('time');
+		echo DB::table("User")->min('time');
+		echo DB::table("User")->avg('time');
+		echo DB::table("User")->sum('time');
+
+	16、使用mysql原生函数
+		DB::table("User")->select(DB::raw("count(*) tot"))->first();
+
+
+	
+
+
+

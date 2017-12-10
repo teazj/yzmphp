@@ -1,0 +1,238 @@
+2017-5-23 Linux 基础命令和RPM软件包
+===========================================================
+上次复习
+1、基础命令
+	ls
+	ls -a
+	ls -l
+	ls -al
+
+	cd 指定路径
+	cd ..
+	cd ~
+
+	pwd
+
+
+	ctrl+l (clear)
+	ctrl+u
+	ctrl+a
+	ctrl+e
+
+
+2、文件操作
+	touch a
+	touch a b c
+	touch file{1..100}
+	rm -rf *
+	rm -rf a
+	rm -rf a b
+
+	vim 
+	echo "1111">>a.txt
+
+	head a.txt
+	head -n 5 a.txt
+	tail a.txt
+	tail -n 5 a.txt
+	more a.txt
+	cat a.txt
+	tac a.txt
+
+	mv 文件 指定目录
+	cp 文件 指定路径
+
+
+
+3、目录操作
+	mkdir 
+	mkdir -p a/b/c
+
+	tree 
+	rm -rf
+
+	mv
+
+4、帮助手册
+	man ls
+
+	ls --help
+
+5、用户相关操作
+	useradd yzm
+	passwd yzm
+	userdel yzm
+	logout
+	who w
+
+ 	vim /etc/passwd
+	vim /etc/group
+	vim /etc/shadow
+
+6、设置网卡
+	1、临时配置
+		ifconfig eth0 192.168.10.11
+
+	2、永久配置 修改配置文件
+		vim /etc/sysconfig/network-scripts/ifcfg-eth0
+
+		service network restart
+
+	3、setup
+
+7、放火墙
+	1、iptables
+		iptables -L
+		iptables -F
+		service iptables save
+		service iptables stop
+		service iptables start
+
+	2、selinux
+		sestatus
+
+		setup
+
+		vim /etc/selinux/config
+
+8、根目录解析
+	bin
+	sbin
+	root
+	home
+	usr
+	etc
+
+
+===========================================================
+今日学习
+
+一、搜索
+
+	1、搜索指定文件
+		find / -name yzm
+		find /root -iname YZM
+
+		ls | grep "yzm"
+
+	2、locate
+		updatedb;
+
+		locate yzm;
+
+	3、whatis 
+		whatis ls
+
+	4、同名目录
+		[root@localhost ~]# mkdir abc
+		mkdir: 无法创建目录 “abc”: 文件已存在
+
+	5、察看命令路径
+		which ls
+
+	6、查看用户
+		whoami
+
+	7、grep
+		grep "云知梦" a.txt
+			#区分大小写
+			#匹配到 输出一行内容
+		grep "yzm" a.txt
+
+
+二、别名管理
+
+	1、创建
+		alias fhq="vim /etc/selinux/config"
+	2、删除
+		unalias fhq
+	3、查看
+		alias
+
+三、压缩包管理
+	1、zip
+
+		unzip -l yzmshop.zip
+		unzip yzmshop.zip
+
+		zip yzm.zip *
+		zip yzm.zip yzmshop
+
+	2、gz
+		解压
+		tar -zxf xiaojinjin.tar.gz
+		压缩
+		tar -zcf xiaojinjin.tar.gz *
+		查看
+		tar -tf xiaojinjin.tar.gz
+
+
+四、使用技巧
+	1、tab
+
+	2、!s 调出最后一次以s开头的命令 
+
+	3、| 管道符
+
+五、rpm 包
+	1、查看安装软件
+		rpm -qa
+
+		rpm -qa | grep "httpd"
+		httpd-2.2.3-43.el5.centos
+
+
+	2、卸载
+		rpm -e http --nodeps
+
+		--nodeps(不检测依赖关系)
+
+	3、安装
+
+		rpm -ivh httpd-2.2.3-43.el5.centos.i386.rpm
+
+
+六、挂载
+	1、挂载
+
+		mount /dev/cdrom /media
+
+
+	2、取消挂载
+		umount /media
+
+	3、查看
+
+		df -Th
+
+七、依赖关系
+	a->b
+	 ->c
+	0、
+		0.1 挂载光盘
+
+		0.2 cd /etc/yum.repos.d/  修改默认yum源
+
+			默认是网络yum，修改成光盘yum
+
+		0.3 修改 配置
+			vi CentOS-Media.repo 
+			[c5-media] name=CentOS-$releasever - Media 
+			baseurl=file:///media 
+			#光盘挂载的目的地 
+			gpgcheck=0 #去官方更新签名关闭 
+			enabled=1 #开启本光盘源 
+			gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-5
+
+		0.4 查看列表
+			yum list
+			
+
+	1、yum安装
+
+
+	2、yum卸载
+
+
+	3、
+

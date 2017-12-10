@@ -1,0 +1,24 @@
+递归函数程序草图:
+
+sum(3){
+	$tot=3;
+
+	$tot+=sum(2){
+		$tot=2;
+
+		$tot+=sum(1){
+			$tot=1;
+			return $tot;	
+		}
+
+		return $tot;
+	}
+
+	return $tot;
+}
+
+
+
+
+
+

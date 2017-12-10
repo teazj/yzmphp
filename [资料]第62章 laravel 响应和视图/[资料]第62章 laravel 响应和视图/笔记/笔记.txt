@@ -1,0 +1,259 @@
+2017-6-15 laravel 响应和视图
+================================================================
+上次复习
+1、获取请求地址
+	#获取路由
+
+	$request->path();
+
+	#获取请求的地址
+	$request->url();
+
+	#获取所有URL地址
+
+	$request->fullUrl();
+
+	#判断路由地址
+
+	$request->is('reg');
+
+2、获取请求方式
+	# 获取请求方式
+	$request->method();
+	# 判断请求方式
+	$request->isMethod();
+
+3、获取请求数据
+	# 获取所有数据
+		$request->all();
+
+	#获取特定数据
+		$request->input('name');
+		$request->input('id');
+		$request->input('id',1);
+
+	#判断是否存在
+		$request->has('name');
+
+	# 提取特定字段
+		$request->only('name','pass');
+
+		$request->except('sex');
+
+4、闪存
+	# 把表当中的所有数据写入闪存
+		$request->flash();
+
+		return back()->withInput();
+
+	#使用闪存
+		{{old('name')}}
+
+	# 部分数据写入闪存
+
+		$request->flashOnly();
+		$request->flashExcept();
+
+5、文件上传
+	# 使用问文件上传(重点);
+
+6、COOKIE
+
+
+================================================================
+今日学习
+
+1、响应
+	0、所有的路由及控制器必须返回某个类型的响应，并发送回用户的浏览器。
+
+	1、响应字符串
+		return "123";
+	2、响应数组形式
+	 	如果响应数组的话，直接会转换程json
+
+	 	$arr=array('name'=>'小镊子','love'=>"小猫咪");
+
+	 	return $arr;
+	3、响应页面
+		return view('xiang');
+		$arr=array('name'=>'小镊子','love'=>"小猫咪");
+		$arr1=array('name'=>'小镊子1','love'=>"小猫咪1");
+		$arr2=array('name'=>'小镊子2','love'=>"小猫咪2");
+		$arr3=array('name'=>'小镊子3','love'=>"小猫咪3");
+
+
+		$data=array(
+			'brr'=>$arr,
+			'brr1'=>$arr1,
+			'brr2'=>$arr2,
+			'brr3'=>$arr3,
+			);
+		return view('xiang')->with(['name'=>'小镊子','love'=>"小猫咪"]);
+		return view('xiang')->with($data);
+	4、响应json
+
+		return response()->json(['name'=>'小镊子','love'=>"小猫咪"]);
+
+	5、文件下载
+
+		return response()->download('./Uploads/q.png');
+
+		#会报错
+		#需要打开php.ini 开启扩展 extension=php_fileinfo.dll
+		#重启服务
+
+
+	6、文件查看
+		return response()->file('./Uploads/q.png');
+
+
+2、视图
+	1、其实就是HTML页面，把控制器中分配的数据进行处理和展示
+
+	2、使用
+		控制器
+			public function index(){
+
+			    $name="云知梦 只为有梦想的人1";
+			    return view('shitu')->with('meinv',$name);
+			}
+
+
+		页面中
+			<!-- 可以直接使用PHP代码 但是不建议大家使用 -->
+			<?php 
+
+				echo $meinv;
+			?>
+
+			{{$meinv}}
+
+	3、 {{}} 是定界符
+		smarty
+		模板解析的原理
+
+		{{$meinv}}  通过一些替换技术(正则匹配) 最终替换程  <?php echo $meinv;?>
+
+
+	4、分配多个数据
+	    return view('shitu')->with('name',$name)->with('qiangge',$qiangge);
+	    return view('shitu')->with(['name'=>$name,'shuaige'=>$qiangge]);
+
+	    $data=array(
+	        // 名字   
+	        "name"=>$name,
+
+	        // 帅哥
+	        "shuaige"=>$qiangge
+
+	        );
+	    return view('shitu',$data);
+	    // return view('shitu')->with($data);
+	5、模板中使用函数
+		{{date('Y-m-d H:i:s')}}
+		
+		{{substr(strtoUpper(md5($pass)),10,2)}}
+
+	6、判断 值存在输出 不存在默认值
+		{{$pass1 or "数据不存在"}}
+
+	7、输出html代码
+		#默认控制器中分配的HTML代码 会直接转换程 实体
+
+		{!!$html!!}
+
+	8、不解析 {{}}
+		@{{$pass}}
+
+
+	9、逻辑控制
+		1、if
+			@if($qiange>100)
+
+				<h1>胖美女</h1>
+			@elseif($qiange>80)
+				<h1>中美女</h1>
+
+			@else
+				<h1>瘦</h1>
+			@endif
+
+		2、for
+			@for($i=0;$i<=10 ;$i++)
+
+				<h1>{{$i}}</h1>
+
+			@endfor
+
+
+		3、while
+			{{$y=0}}
+			@while($y<=5)
+
+				{{$y++}}
+
+				<h1>{{$y}}</h1>
+
+			@endwhile
+
+		4、嵌套
+			@for($i=0;$i<=10;$i++)
+				
+				@if($i%2)
+					<h1 style="background:red">{{$i}}</h1>
+
+				@else
+					<h1 style="background:blue">{{$i}}</h1>
+
+
+				@endif
+			@endfor	
+
+		5、foreach
+			@foreach($data as $key=>$value)
+				<span>{{$value->id}}</span>
+				<span>{{$value->name}}</span>
+				<span>{{$value->pass}}</span>
+				@if($value->statu)
+					<span>正常</span>
+				@else
+					<span>禁用</span>
+				@endif
+				<span>{{date('Y-m-d H:i:s',$value->time)}}</span>
+			@endforeach
+
+	10、模板布局
+		# 把页面的公共部分进行提取
+
+		1、新建公共目录  (D:\laravel\yzmedu\yzm2\resources\views) 			新建layout目录
+
+		2、新建后台公共文件
+			admin.blade.php
+
+		3、打开后台公共文件
+
+			#将每一个页面不一样的部分用 @yield('title')占位 ，一个页面可以有多个占位 用名字区分
+
+		4、普通页面中该如何书写
+			# 继承公共模板页面
+			@extends('layout.admin')
+
+			# 修改内容区域
+			@section('title','云知梦后台v管理系统')
+
+			@section('main')
+
+			<div class="col-md-10">
+				
+				<div class="jumbotron">
+				 	<img src="/admins/img/4.jpg"height="310px" width="100%" alt="">
+				 	<h2>联想 后台管理系统</h2>
+				 	<p>开发者 ： 赵丰泰</p>
+				</div>
+			</div>
+
+			@endsection
+
+
+	11、文件包含
+		@include('public.footer')

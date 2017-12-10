@@ -1,0 +1,81 @@
+2017.4.11-Mysql数据库操作
+
+上次复习:
+--------------------------------------------------------
+1.字段管理
+2.索引管理
+3.数据库操作
+4.增-insert:
+insert into user(username,password) values('user1','123');
+
+5.删-delete:
+delete from user where id=5;
+
+6.改-update:
+update user set password='123' where id=2;
+update user set username='user33',password='123' where id=3;
+
+7.查-select:
+select * from user;
+#查询表中所有字段以及每个字段所对应的所有记录
+
+8.where条件
+1)where id>=3 and id<=7
+where id between 3 and 7;
+
+2)where id=3 or id=5 or id=7;
+where id in(3,5,7);
+
+今天内容-select:
+--------------------------------------------------------
+查询一般优化:
+1.查单列的速度要优于多列.
+2.查主键索引的列中的所有值要比其他列速度快.
+
+选择特定的字段:
+select id,username from user;
+
+给字段名起别名:
+select username as user,password as pass from user;
+select username user,password pass from user;
+
+distinct关键字的使用:
+select distinct password from user;
+
+使用where条件进行查询:
+select * from user where id>=3 and id<=5;
+
+between and的使用方法:
+select * from user where id between 3 and 5;
+
+or的使用方法:
+select * from user where id=3 or id=5 or id=7;
+
+in的使用方法:
+select * from user where id in(3,5,7);
+
+like的使用方法:
+select * from user where username like '%user1%';
+
+网站的搜索技术:
+1.like
+2.标签
+3.搜索引擎
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

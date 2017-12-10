@@ -1,0 +1,207 @@
+2017-5-22 Linux 基础命令
+===============================================================
+今日学习
+1、姓名
+	程张浩
+	男
+	称号 “少女杀手”
+
+2、常用命令
+	1、ls
+		作用： 查看目录文件
+
+	2、ls -a
+		作用：查看所有文件
+
+	3、ls -l (ll)
+		查看文件的基本信息
+		-rw-r--r-- 1 root root     4764   05-22 20:16 install.log.syslog
+		 权限         所属情况  文件大小    创建时间    文件名
+
+    4、ls -al
+    	查看所有文件及基本信息
+
+    5、cd 指定目录
+    	
+    	打开目录
+
+    6、pwd
+    	查看当前文件绝对路径
+
+    7、cd ..
+    	回到上一级目录
+
+    8、clear
+    	清屏
+
+    9、cd ~
+    	回到家目录
+
+
+
+3、快捷键
+	1、ctrl+l
+		清屏
+
+	2、ctrl+u
+		删除行
+
+	3、ctrl+a
+		行首
+
+	4、ctrl+e
+		行末
+
+	5、ctrl+c
+		结束脚本
+
+
+4、文件操作
+	1、创建文件
+
+		touch a
+		touch a.txt b.txt c.txt
+		touch file{1..100}
+
+	2、删除文件	
+		rm -rf a 删除a文件
+		rm -rf * 删除当前目录下所有文件
+
+	3、写入文件
+		vi打开文件
+
+		echo "11111">> b.txt
+
+	4、查看文件
+		vi
+		head c.txt 查看文件前10行数据(默认)
+	 	head -n 5 c.txt 查看文件前5行数据
+	 	tail c.txt 后10行文件
+	 	tail -n 5 c.txt
+	 	more c.txt
+	 	cat c.txt 正序查看文件
+	 	tac c.txt 倒序查看文件
+
+	 5、文件复制
+	 	cp a.txt c.txt
+
+
+	 6、移动文件
+	 	mv a.txt /yzm.txt
+
+
+5、目录相关操作
+	1、创建目录
+		mkdir abc
+		mkdir -p a/b/c
+
+	2、删除目录
+		rm -rf cba
+
+	3、移动目录（重命名）
+		mv  目录 新目录
+
+	4、查看目录
+		tree 目录
+		查看目录结构 展示树形结构
+
+	5、复制目录
+		cp -R 目录 新目录
+
+
+6、查看帮助手册
+	1、man
+		man mkdir
+
+	2、--help
+		mdkir --help
+
+7、用户管理
+	1、查看当前登录用户
+		who、w
+
+	2、添加用户
+		useradd xiaojin
+
+	3、设置密码
+
+		passwd xiaojin
+
+	4、删除用户
+
+		userdel xiaojin
+
+	5、退出
+		logout
+
+	6、超级用户家目录
+		/root
+
+	7、普通用户家目录
+		/home/xiaojin
+		/home/xiaocai
+
+	8、uptime 系统运行情况
+
+	9、与用户有关的文件
+		/etc/passwd 用户信息 
+		/etc/group  用户组信息 
+		/etc/shadow 用户密码 
+		/home/user4 用户家目录
+
+
+8、根目录了解
+
+	1、root
+		超级用户的家目录
+
+	2、home
+		普通用户家目录
+
+	3、bin
+		普通用户具有执行权限
+
+	4、sbin
+		超级用户
+
+	5、selinux
+		防火墙设置
+
+	6、net 
+		网卡
+
+	7、etc
+		系统相关配置
+
+
+9、配置网卡
+	1、修改配置文件
+		/etc/sysconfig/network-scripts
+
+		service network restart
+
+	2、使用setup
+
+	3、临时配置
+		ifconfig eth0 192.168.10.20
+
+
+10、配置防火墙 selinux
+
+	1、vim /etc/sysconfig/selinux
+
+	2、setup
+
+11、iptables
+	1、查看
+		iptables -L
+	2、清空
+		iptables -F
+
+	3、保存
+		service iptables save
+
+
+
+
+

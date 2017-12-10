@@ -1,0 +1,222 @@
+2017-6-14 laravel 请求
+=========================================================================
+上次复习
+1、路由
+	0、作用:
+	有利于百度收录，及SEO优化
+
+	1、路由书写 (D:\laravel\yzmedu\yzm2\routes\web.php)
+
+		Route::get('/',function(){
+			echo "云知梦";
+		});
+
+		Route::get('admin',function(){
+			return view();
+
+		});
+
+		Route::get('admin/user',"UserController@index");
+
+	2、路由类型
+		Route::get($uri, $callback);
+		Route::post($uri, $callback);
+		Route::put($uri, $callback);
+		Route::patch($uri, $callback);
+		Route::delete($uri, $callback);
+		Route::options($uri, $callback);
+
+	3、CSRF保护
+		{{csrf_field}}
+
+	4、模拟PUT请求、delete请求
+		{{csrf_field}}
+
+		<input type="hidden" name="_method" value="put">
+
+	5、路由带参数
+		Route::get("goods_info/{id}",function($id){
+			echo "$id";
+		});
+
+		Route::get("goods_info/{id}",'IndexController@index')
+
+	6、设置默认值
+		Route::get("goods_info/{id?}",function($id='默认值'){
+			echo "$id";
+		});
+
+	7、命名路由
+		Route::get('/','IndexController@index')->name('abc');
+
+	8、路由组
+
+		Route::group(['namespace'=>'','prefix'=>'','middleware'=>''],function(){
+
+
+		});
+
+	9、资源路由
+
+		Route::recourse('admin/user','UserController');
+
+
+2、模板继承
+
+
+3、中间件
+
+	[后台页面及登录搭建完成]
+=========================================================================
+今日学习
+
+1、请求
+	1) 获取地址
+		// 输出当前url地址
+
+			echo $request->fullUrl();
+			http://www.yzmedu2.com/request?name=100
+
+		// 获取URL的路由
+
+			echo $request->path();
+			request
+
+		// 获取URl地址初参数
+
+
+			echo $request->url();
+			http://www.yzmedu2.com/request
+		// 判断路由是否是request
+			返回值 true|false
+
+			var_dump($request->is('abc'));
+
+	2) 获取请求类型
+		// 判断当前的请求类型
+
+			echo $request->method();
+
+		// 判断当前的请求是不是get请求
+			返回值 true|false
+
+			var_dump($request->isMethod('GET'));
+
+		// 使用
+			public function add(Request $request){
+
+			    // 判断当前是get请求
+
+			    if ($request->isMethod('GET')) {
+			        // 加载添加页面
+			        return view('add');
+			    }else{
+			        // 数据库的入库操作
+			        echo "插入数据库";
+			    }
+
+			    
+			}
+
+	3) 请求数据
+		// 获取所有的请求数据
+
+			$data=$request->all();
+
+		// 获取特定字段
+
+			echo $request->input('name');
+
+		// 设置默认值
+			echo $request->input('yao','强哥');
+
+		// 判断师傅存在
+			返回值 true|false
+			var_dump($request->has('username'));
+
+		// 获取部分数据
+
+			$data1=$request->only('name','pass');
+			$data1=$request->only(['name','pass']);
+
+		// 除了一些数据以外
+
+			$data1=$request->except('_token','name');
+			$data1=$request->except(['_token','name']);
+
+	4)闪存
+		// 把表单提交所有数据写入闪存
+
+		$request->flash();
+
+		// 把谁写入闪存
+
+		$request->flushOnly();
+
+
+		// 初了谁写入闪存
+		$request->flushExcept();
+
+		// 把当前所有的数据都写入闪存
+
+		return back()->with('errors','用户名长度不满足')->withInput();
+
+	5) 图片上传
+		// 获取上传文件
+
+		    $img=$request->file('img');
+
+		    $img2=$request->img;
+
+		// 判断文件是否上传
+
+		    var_dump($request->hasFile('img'));
+
+		// 实例
+		if ($request->hasFile('img')) {
+		    // 获取后缀名
+		    $ext=$request->file('img')->getClientOriginalExtension();
+		    // 新的文件名
+
+		    $newFile=time().rand().".".$ext;
+
+		    // 上传文件操作
+		    $request->file('img')->move('./Uploads',$newFile);
+		}else{
+		    // 回到上一个页面
+		    return back();
+		}
+
+
+		[实际开发中 使用无刷新上传文件]
+
+	6) COOKIE 
+		1、COOKIE的使用场景
+			登录
+				[如果未勾选自动登录 默认采用session]
+				[如果勾选自动登录 默认采用cookie]
+			浏览纪录
+
+			[使用cookie和session 实现企业邮箱登录效果]
+
+		2、注意：
+			laravel 框架把所有的COOKIE进行加密
+			$_COOKIE['name']  =/= $request->cookie('name');
+
+		3、查看cookie
+			// 查看所有cookie
+
+			    // dd($request->cookie());
+
+			// 查看cookie
+			    echo $request->cookie('laravel_session');
+
+			    echo \Cookie::get('laravel_session');
+
+		4、设置cookie	
+			// 设置COOKIE
+			   \Cookie::queue('shauige','非浩哥莫属',10);
+
+			   $cookie = cookie('name', 'value', 10);
+
+			   return response('Hello World')->cookie($cookie);

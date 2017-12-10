@@ -1,0 +1,76 @@
+2017.4.27-PHP面向对象
+
+PHP面向对象学习
+-------------------------------------------------------
+1.概念
+2.继承
+3.封装
+4.实例:分页类
+5.实例:数据库操作类
+6.抽象类
+7.接口
+8.多态
+9.魔术方法
+10.关键字
+11.命名空间
+
+上次复习:
+-------------------------------------------------------
+1.封装
+2.数据库操作类
+
+今天内容:
+-------------------------------------------------------
+抽象类:
+#含有抽象方法的类.
+abstract class Usb{
+	abstract public function say();
+} 
+
+抽象方法:
+#未被实现的方法.
+abstract public function start();
+
+接口:
+#只含有抽象方法的类.
+interface Usb{
+	public function say();
+}
+
+接口扩展:
+#子接口继承父接口中的所有抽象方法
+interface Usb2 extends Usb1{
+	public function say2();
+}
+
+多态:
+#多种形态
+#只有实现了Usb类或接口体内的所有抽象方法的类所生产出来的对象才能使用useUsb函数
+function useUsb(Usb $o){
+	$o->load();
+	$o->start();
+	$o->unload();
+	echo '<hr>';
+}
+
+魔术方法:
+1.__construct
+2.__destruct
+3.__toString
+4.__call
+5.__get
+6.__set
+7.__isset
+8.__unset
+
+
+
+
+
+
+
+
+
+
+
+

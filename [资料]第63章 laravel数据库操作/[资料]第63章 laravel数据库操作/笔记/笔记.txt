@@ -1,0 +1,203 @@
+2017-6-16 laravel 数据库操作
+-------------------------------------------------------------------
+上次复习
+1、响应
+
+	1、响应字符串
+
+		return "123";
+	2、响应数组
+		#把数组转换字符串
+		return array('name'=>'123');
+
+	3、*响应json
+		return response()->json(['name'=>'user']);
+
+	4、*响应页面
+		return view();
+		return view()->with();
+2、视图
+	1、如何解析变量
+		return view()->width('name','123');
+		{{$name}}
+
+	2、如何使用函数
+		{{time()}}
+
+	3、直接输出HTML
+		{!!$html!!}
+
+	4、不想解析PHP代码
+		@{{$name}}
+
+	6、使用流程控制
+		if
+
+		for
+
+		foreach
+
+	7、模板继承
+		@extends()
+
+		@section()
+		@endsection
+
+	8、模板引入
+		@include()
+-------------------------------------------------------------------
+今日学习
+1、数据库相关操作
+	1、链接数据库(D:\laravel\yzmedu\yzm2\.env)
+		DB_CONNECTION=mysql
+		DB_HOST=127.0.0.1
+		DB_PORT=3306
+		DB_DATABASE=yzm
+		DB_USERNAME=root
+		DB_PASSWORD=123
+
+	2、执行原生SQL语句
+		1、查询数据
+
+			$data=\DB::select('select * from  user');
+
+		2、删除数据
+		 	如果删除成功 返回影响行数、
+		 	var_dump(\DB::delete('delete from user where id>5'));
+
+		3、增加数据
+			返回值bool 如果成功 true 失败 false
+			var_dump(\DB::insert("insert into user values(null,'123','123',0,'23131321')"));
+		4、修改数据
+		 	返回值 影响行数 
+			var_dump(\DB::update('update user set name="帅哥" where id>3'));
+
+
+		5、运行一段命令
+
+			\DB::statement("create database yzmedu");
+			\DB::statement("drop database yzmedu");
+
+		6、事物机制
+
+			\DB::beginTransaction();
+
+		 	删除id=1数据
+
+			$a=\DB::delete("delete from user where id=1");
+		 	删除id=10数据
+			$b=\DB::delete("delete from user where id=11");
+
+			if ($a && $b) {
+			    # code...
+			     提交事务
+			    \DB::commit();
+			}else{
+			     回滚事务
+			    \DB::rollback();
+			}
+
+
+2、实例
+	[图片管理]
+	[图片无刷新上传]
+	[批量删除]
+	[无刷新删除]
+
+3、实现左侧菜单的打开
+	主要利用了SERVER数组
+
+
+	[作业：登录成功返回原页面]
+
+
+4、无刷新图片上传
+	0、插件学习地址
+		http://www.uploadify.com/demos/
+	1、页面中必须引入插件 (D:\laravel\yzmedu\yzm2\resources\views\admin\pic\create.blade.php)
+		<!-- 引入CSS -->
+		<link rel="stylesheet" href="/up/uploadify.css">
+		<!-- 引入JQ -->
+		<script src="/admins/bs/js/jquery.min.js"></script>
+		<!-- 引入文件上传插件 -->
+		<script src="/up/jquery.uploadify.min.js"></script>
+
+	2、页面中书写页面结构
+		<div class="form-group">
+			<label for="">IMG</label>
+			<input type="file" name="" id="uploads">
+			<div id="main">
+				
+			</div>
+			<input type="hidden" name="img" id="imgs">
+		</div>
+
+	3、JS代码
+		// 当所有HTML代码都加载完毕
+		$(function() {
+			// 声明字符串
+
+			var imgs='';
+			// 使用 uploadify 插件
+	        $('#uploads').uploadify({
+	        	// 设置文本
+	            'buttonText' : '图片上传 美照',
+	            // 设置文件传输数据
+	            'formData'     : {
+	            	'_token':'{{ csrf_token() }}',
+	            	'files':'Goods',
+	                
+	            },
+	            // 上传的flash动画
+	            'swf'      : "/up/uploadify.swf",
+	            // 文件上传的地址
+	            'uploader' : "/admin/shangchuan",
+	            // 当文件上传成功
+	            'onUploadSuccess' : function(file, data, response) {
+
+	            	// 拼接图片
+	            	imgs="<img width='200px'  src='/Uploads/Goods/"+data+"'>";
+	            	// 展示图片
+	            	$("#main").html(imgs);
+	            	// 隐藏传递数据
+	            	$("#imgs").val(data);
+	               
+	            }
+	        });
+	    });
+	4、路由地址
+		Route::any('shangchuan','CommonController@upload');
+
+	5、控制器
+
+		// 公共控制器
+		class CommonController extends Controller
+		{
+			// 文件上传的方法
+
+			public function upload(Request $request){
+				// 获取用户上传的内容
+				$file=$request->file('Filedata');
+				// 判断目录是否存在
+				$dir=$request->input('files');
+				if (file_exists("./Uploads/{$dir}")) {
+				
+				}else{
+					mkdir("./Uploads/{$dir}");
+				}
+				// 判断上传的文件是否有效
+				if ($file->isValid()) {	
+					// 获取后缀
+					$ext=$file->getClientOriginalExtension();
+					// 生成新的文件名
+					$newFile=time().rand().'.'.$ext;
+					// 移动到指定目录
+					$request->file('Filedata')->move('./Uploads/'.$dir,$newFile);
+					echo $newFile;
+				}
+			}
+		}
+
+
+
+

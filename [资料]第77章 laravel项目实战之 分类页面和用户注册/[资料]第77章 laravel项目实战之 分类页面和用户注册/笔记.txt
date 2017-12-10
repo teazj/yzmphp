@@ -1,0 +1,28 @@
+1、设置邮件服务器
+	1、登录163邮箱
+
+	2、设置》POP3/SMTP
+
+	3、设置授权密码
+
+
+2、正laravel中配置邮件服务器
+	打开.env文件
+	MAIL_DRIVER=smtp
+	MAIL_HOST=smtp.163.com
+	MAIL_PORT=25
+	MAIL_USERNAME=18734136852@163.com
+	MAIL_PASSWORD=a123456
+	MAIL_ENCRYPTION=null
+	MAIL_FROM_NAME=联想账户中心
+
+3、发送邮件
+	1、发送文字
+
+		\Mail::raw('我爱你云知梦',function($message){
+		    $message->to("892865095@qq.com");
+		    $message->subject("亲爱的用户,恭喜您注册成功");
+		});
+
+	2、发送页面
+		

@@ -1,0 +1,102 @@
+2017-6-22 laravel 数据库操作(二)
+-------------------------------------------------------------------
+今日学习
+
+1、ajax分页
+	1、返回json数据
+		处理比较繁琐，需要字符串拼接
+
+		传输速度比较快
+
+	2、返回处理完成字符串
+
+		处理方便
+		传输速度慢
+
+2、数据基本操作
+	1、delete
+	2、select
+	3、insert
+	4、update
+
+3、连贯操作
+
+
+
+
+
+
+4、表单验证
+	1、控制器
+		// 规则
+
+		$rules=[
+		        'name'=>'required|unique:user|between:6,12',
+		        "pass"=>'required|between:6,12|same:repass',
+		    ];
+
+		// 所有数据
+
+		$input=$request->all();
+
+		// 修改提示信息
+
+		$message=array(
+
+		    "name.required"=>"请输入用户名",
+		    "name.unique"=>"用户名以存在",
+		    "name.between"=>"长度不满足",
+		    "pass.required"=>"请输入密码",
+		    "pass.between"=>"密码长度不满足",
+		    "pass.sname"=>"两次不一致",
+		    );
+
+		// 设置表单验证的参数
+		    // 参数一 需要验证的数据
+		    // 参数二 验证规则
+		    // 参数三 提示信息
+		$validator = \Validator::make($input,$rules,$message);
+
+		
+		// 进行验证
+
+		if($validator->passes()){
+		    // 处理数据
+		    unset($_POST['_token']);
+		    unset($_POST['repass']);
+
+		    $_POST['pass']=\Crypt::encrypt( $_POST['pass']);
+		    $_POST['time']=time();
+		    if (\DB::table("user")->insert($_POST)) {
+		        # code...
+		        return redirect("admin/user");
+		    }else{
+		        return back();
+		    }
+
+		}else{
+		    return back()->withInput()->withErrors($validator);
+		}
+
+	2、页面中提示错误
+		
+		@if (count($errors) > 0)
+		    <div class="alert alert-danger">
+		        <ul>
+		            @foreach ($errors->all() as $error)
+		                <li>{{ $error }}</li>
+		            @endforeach
+		        </ul>
+		    </div>
+		@endif
+
+
+
+5、密码加密
+	echo $pass=\Crypt::encrypt('123');
+
+	echo \Crypt::decrypt('MjM1OCJ9');
+
+
+
+

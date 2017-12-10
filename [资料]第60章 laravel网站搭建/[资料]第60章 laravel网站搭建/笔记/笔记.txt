@@ -1,0 +1,143 @@
+2017-6-13 laravel中间件和请求
+--------------------------------------------------------------
+今日学习
+1、使用laravel搭建网站的前后台
+	1、路由规则 (D:\laravel\yzmedu\yzm2\routes\web.php)
+
+		// 前台路由
+			
+			Route::group(['namespace'=>'Home'],function(){
+
+				// 前台首页
+				Route::get('/',"IndexController@index");
+
+
+			});
+
+
+
+		// 后台路由
+			// 通过路由组 提取公共命名空间 公共的前缀
+			Route::group(['namespace'=>'Admin','prefix'=>'admin'],function(){
+
+				// 后台首页
+				Route::get('/','IndexController@index');
+				// 后台用户管理模块
+				Route::resource('user','UserController');
+				// 后台商品管理模块
+				Route::resource('goods','GoodsController');
+				
+			});
+
+	2、搭建控制器 (D:\laravel\yzmedu\yzm2\app\Http\Controllers)
+		1)新建Admin目录，存放后台控制器
+
+
+		2)新建Home目录，存放前台控制器
+
+		3)在前后台目录 根据路由的需要创建控制器(以后台为例 需要修改命名空间)
+			IndexController.php
+
+			namespace App\Http\Controllers\Admin;
+
+			use Illuminate\Http\Request;
+
+			use App\Http\Controllers\Controller;
+			use DB;
+
+			// 后台首页控制器
+			class IndexController extends Controller
+			{
+			   // 后台首页方法
+
+			    public function index(){
+			        echo "我是后台首页";
+			    }
+			}
+
+
+	3、搭建页面(D:\laravel\yzmedu\yzm2\resources\views)
+		以后台首页为例
+
+		1、后台首页控制器
+			public function index(){
+			    // 引入页面
+
+			    return view('admin.index');
+			}
+
+		2、在视图目录下新建admin目录，用于存放所有的后台页面
+
+		3、在admin目录下新建后台首页文件 index.blade.php
+
+		4、需要修改CSS样式和JS引入目录
+		   一般建议大家把样式文件夹放到 D:\laravel\yzmedu\yzm2\public 下 
+
+	4、完成用户模块
+
+		1、控制器如何书写 
+		(D:\laravel\yzmedu\yzm2\app\Http\Controllers\Admin\UserController.php)
+
+		2、页面如何书写 
+		(D:\laravel\yzmedu\yzm2\resources\views\admin\user)
+
+
+2、模板布局
+	0、主要解决网站后台公共部分的修改
+
+
+	1、需要在视图目录下新建muban模板 
+
+	2、新建一个模板文件 admin.blade.php
+		<html>
+			<head>
+			</head>
+			<body>
+				#不一样的地方需要使用
+				@yield('main')
+			</body>
+		</html>
+
+	3、普通页面如何书写
+		#继承模板
+		@extends('muban.admin')
+
+		#替换占位的内容
+		@section('main')
+		<!-- 内容 -->
+		<div class="col-md-10">
+			
+			<div class="jumbotron">
+			 	<img src="/admins/img/4.jpg"height="310px" width="100%" alt="">
+			 	<h2>联想 后台管理系统</h2>
+			 	<p>开发者 ： 赵丰泰</p>
+			</div>
+		</div>
+
+		@endsection
+
+
+3、中间件
+	1、路由如何书写
+		// 通过路由组 提取公共命名空间 公共的前缀 中间件
+
+		Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>'adminLogin'],function(){
+
+			// 后台首页
+			Route::get('/','IndexController@index');
+			
+		});
+
+
+	2、如何新建中间件
+		php artisan make:middleware adminLogin
+
+	3、注册中间件(D:\laravel\yzmedu\yzm2\app\Http\kernel.php)
+		protected $routeMiddleware = [
+		    'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+		    'adminLogin' => \App\Http\Middleware\AdminLogin::class,
+		];
+
+
+	4、打开中间件(D:\laravel\yzmedu\yzm2\app\Http\Middleware\adminLogin.php)
+

@@ -1,0 +1,118 @@
+2017.3.31-Mysql数据库设计
+
+上次复习:
+-----------------------------------------------------
+1.mysql基础命令
+2.mysql数据库操作
+3.mysql表操作
+4.mysql数据库设计
+
+今天内容:
+-----------------------------------------------------
+mysql数据库设计:
+1.数据表引擎
+2.表字段类型
+3.数据字段属性
+4.mysql服务器默认字符集
+5.索引管理
+
+表字段类型:
+1.数值
+1)tinyint
+0-255
+
+2)int
+0-42亿
+
+2.字符串
+1)char(M)
+0-255
+
+2)varchar(M)
+0-65535
+
+3)tinytext
+0-255
+
+4)text
+0-65535
+
+5)mediumtext
+0-16777215
+
+6)longtext
+0-4294967295
+
+3.日期
+int
+
+有符号数值:
+create table t1(
+id int
+);
+
+无符号数值:
+create table t2(
+id int unsigned
+);
+
+char类型:
+create table t3(
+username char(5)
+);
+
+varchar类型:
+create table t4(
+username varchar(5)
+);
+
+日期类型:
+create table t5(
+regtime int
+);
+
+字符类型:
+1.最大长度或最大数值
+2.占用空间
+
+数据字段属性:
+1.unsigned
+无符号
+
+2.zerofill
+0填充
+
+3.auto_increment
+mysql> create table t9(
+    -> id int unsigned auto_increment primary key,
+    -> username varchar(50)
+    -> );
+
+4.null
+age int null;
+
+5.not null
+age int not null;
+
+6.default
+age int not null default 18;
+
+mysql服务器默认字符集:
+1.建议客户端字符集是utf8
+default-character-set = utf8
+
+2.mysql服务端字符集为utf8
+character-set-server = utf8
+
+3.mysql服务端校验字符集
+collation-server = utf8_general_ci
+
+
+
+
+
+
+
+
+
+

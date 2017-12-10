@@ -1,0 +1,272 @@
+2017.4.13-Mysql数据库操作与优化
+
+上次复习:
+-----------------------------------------------
+1.mysql查询
+2.mysql函数
+3.mysql分组聚合
+
+补充:
+-----------------------------------------------
+分组聚合:
+select class,max(id),min(id),count(*),sum(id),avg(id) from user group by class;
++-------+---------+---------+----------+---------+---------+
+| class | max(id) | min(id) | count(*) | sum(id) | avg(id) |
++-------+---------+---------+----------+---------+---------+
+|     1 |      10 |       1 |        6 |      29 |  4.8333 |
+|     2 |       7 |       4 |        2 |      11 |  5.5000 |
+|     3 |       9 |       6 |        2 |      15 |  7.5000 |
++-------+---------+---------+----------+---------+---------+
+
+今天内容-mysql操作:
+-----------------------------------------------
+mysql多表查询:
+1.普通多表查询
+2.嵌套查询或子查询
+3.链接查询
+1)左链接
+2)右链接
+3)内链接
+
+查看class表数据:
+mysql> select * from class;
++----+--------+------------+
+| id | name   | ctime      |
++----+--------+------------+
+|  1 | class1 | 1492086867 |
+|  2 | class2 | 1492086867 |
+|  3 | class3 | 1492086867 |
++----+--------+------------+
+
+查看user表数据:
+mysql> select * from user;
++----+----------+-----+
+| id | username | age |
++----+----------+-----+
+|  1 | user1    |  19 |
+|  2 | user2    |  29 |
+|  3 | user3    |  31 |
+|  4 | user4    |  22 |
+|  5 | user5    |  23 |
+|  6 | user6    |  18 |
+|  7 | user7    |  17 |
+|  8 | user8    |  25 |
+|  9 | user9    |  27 |
+| 10 | user10   |  32 |
++----+----------+-----+
+
+两表无条件查询:
+mysql> select * from class,user;
++----+--------+------------+----+----------+-----+
+| id | name   | ctime      | id | username | age |
++----+--------+------------+----+----------+-----+
+|  1 | class1 | 1492086867 |  1 | user1    |  19 |
+|  2 | class2 | 1492086867 |  1 | user1    |  19 |
+|  3 | class3 | 1492086867 |  1 | user1    |  19 |
+|  4 | class4 | 1492087405 |  1 | user1    |  19 |
+|  1 | class1 | 1492086867 |  2 | user2    |  29 |
+|  2 | class2 | 1492086867 |  2 | user2    |  29 |
+|  3 | class3 | 1492086867 |  2 | user2    |  29 |
+|  4 | class4 | 1492087405 |  2 | user2    |  29 |
+|  1 | class1 | 1492086867 |  3 | user3    |  31 |
+|  2 | class2 | 1492086867 |  3 | user3    |  31 |
+|  3 | class3 | 1492086867 |  3 | user3    |  31 |
+|  4 | class4 | 1492087405 |  3 | user3    |  31 |
+|  1 | class1 | 1492086867 |  4 | user4    |  22 |
+|  2 | class2 | 1492086867 |  4 | user4    |  22 |
+|  3 | class3 | 1492086867 |  4 | user4    |  22 |
+|  4 | class4 | 1492087405 |  4 | user4    |  22 |
+|  1 | class1 | 1492086867 |  5 | user5    |  23 |
+|  2 | class2 | 1492086867 |  5 | user5    |  23 |
+|  3 | class3 | 1492086867 |  5 | user5    |  23 |
+|  4 | class4 | 1492087405 |  5 | user5    |  23 |
+|  1 | class1 | 1492086867 |  6 | user6    |  18 |
+|  2 | class2 | 1492086867 |  6 | user6    |  18 |
+|  3 | class3 | 1492086867 |  6 | user6    |  18 |
+|  4 | class4 | 1492087405 |  6 | user6    |  18 |
+|  1 | class1 | 1492086867 |  7 | user7    |  17 |
+|  2 | class2 | 1492086867 |  7 | user7    |  17 |
+|  3 | class3 | 1492086867 |  7 | user7    |  17 |
+|  4 | class4 | 1492087405 |  7 | user7    |  17 |
+|  1 | class1 | 1492086867 |  8 | user8    |  25 |
+|  2 | class2 | 1492086867 |  8 | user8    |  25 |
+|  3 | class3 | 1492086867 |  8 | user8    |  25 |
+|  4 | class4 | 1492087405 |  8 | user8    |  25 |
+|  1 | class1 | 1492086867 |  9 | user9    |  27 |
+|  2 | class2 | 1492086867 |  9 | user9    |  27 |
+|  3 | class3 | 1492086867 |  9 | user9    |  27 |
+|  4 | class4 | 1492087405 |  9 | user9    |  27 |
+|  1 | class1 | 1492086867 | 10 | user10   |  32 |
+|  2 | class2 | 1492086867 | 10 | user10   |  32 |
+|  3 | class3 | 1492086867 | 10 | user10   |  32 |
+|  4 | class4 | 1492087405 | 10 | user10   |  32 |
++----+--------+------------+----+----------+-----+
+
+结论:
+1.两表数据进行所有组合.
+2.数据量是两表条数乘积.
+
+设计了关系的user表:
+mysql> select * from user;
++----+----------+-----+----------+
+| id | username | age | class_id |
++----+----------+-----+----------+
+|  1 | user1    |  19 |        1 |
+|  2 | user2    |  19 |        1 |
+|  3 | user3    |  19 |        1 |
+|  4 | user4    |  19 |        1 |
+|  5 | user5    |  19 |        2 |
+|  6 | user6    |  19 |        3 |
+|  7 | user7    |  19 |        2 |
+|  8 | user8    |  19 |        1 |
+|  9 | user9    |  19 |        2 |
+| 10 | user10   |  19 |        3 |
++----+----------+-----+----------+
+
+需求1:请查询出每一个学员的姓名、年龄、班级名称和班级创建时间?
+mysql> select user.username,user.age,class.name,class.ctime from user,class where user.class_id=class.id;
++----------+-----+--------+------------+
+| username | age | name   | ctime      |
++----------+-----+--------+------------+
+| user1    |  19 | class1 | 1492086867 |
+| user2    |  19 | class1 | 1492086867 |
+| user3    |  19 | class1 | 1492086867 |
+| user4    |  19 | class1 | 1492086867 |
+| user5    |  19 | class2 | 1492086867 |
+| user6    |  19 | class3 | 1492086867 |
+| user7    |  19 | class2 | 1492086867 |
+| user8    |  19 | class1 | 1492086867 |
+| user9    |  19 | class2 | 1492086867 |
+| user10   |  19 | class3 | 1492086867 |
++----------+-----+--------+------------+
+
+需求2:请查询出每一个学员的姓名、年龄、班级名称和班级创建时间，并把时间戳转成正常日期显示出来?
+mysql> select user.username,user.age,class.name,from_unixtime(class.ctime) ctime from user,class where user.class_id=class.id;
++----------+-----+--------+---------------------+
+| username | age | name   | ctime               |
++----------+-----+--------+---------------------+
+| user1    |  19 | class1 | 2017-04-13 20:34:27 |
+| user2    |  19 | class1 | 2017-04-13 20:34:27 |
+| user3    |  19 | class1 | 2017-04-13 20:34:27 |
+| user4    |  19 | class1 | 2017-04-13 20:34:27 |
+| user5    |  19 | class2 | 2017-04-13 20:34:27 |
+| user6    |  19 | class3 | 2017-04-13 20:34:27 |
+| user7    |  19 | class2 | 2017-04-13 20:34:27 |
+| user8    |  19 | class1 | 2017-04-13 20:34:27 |
+| user9    |  19 | class2 | 2017-04-13 20:34:27 |
+| user10   |  19 | class3 | 2017-04-13 20:34:27 |
++----------+-----+--------+---------------------+
+
+需求3:请查询出每一个学员的姓名、年龄、班级名称和班级创建时间，并且只查询1班学员?
+mysql> select user.username,user.age,class.name,class.ctime from user,class where user.class_id=class.id and class.id=1;
++----------+-----+--------+------------+
+| username | age | name   | ctime      |
++----------+-----+--------+------------+
+| user1    |  19 | class1 | 1492086867 |
+| user2    |  19 | class1 | 1492086867 |
+| user3    |  19 | class1 | 1492086867 |
+| user4    |  19 | class1 | 1492086867 |
+| user8    |  19 | class1 | 1492086867 |
++----------+-----+--------+------------+
+
+需求4:查询user表中存在的所有班级的信息?
+mysql> select * from class where id in(select distinct class_id from user);
++----+--------+------------+
+| id | name   | ctime      |
++----+--------+------------+
+|  1 | class1 | 1492086867 |
+|  2 | class2 | 1492086867 |
+|  3 | class3 | 1492086867 |
++----+--------+------------+
+
+需求5:查询班级表中每个班的所有学员信息?
+mysql> select * from user where class_id in(select id from class);
++----+----------+-----+----------+
+| id | username | age | class_id |
++----+----------+-----+----------+
+|  1 | user1    |  19 |        1 |
+|  2 | user2    |  19 |        1 |
+|  3 | user3    |  19 |        1 |
+|  4 | user4    |  19 |        1 |
+|  5 | user5    |  19 |        2 |
+|  6 | user6    |  19 |        3 |
+|  7 | user7    |  19 |        2 |
+|  8 | user8    |  19 |        1 |
+|  9 | user9    |  19 |        2 |
+| 10 | user10   |  19 |        3 |
+| 11 | user10   |  19 |        4 |
++----+----------+-----+----------+
+
+左链接:
+需求6:请统计每个班的总人数?
+
+1)错误答案
+mysql> select class_id,count(*) from user group by class_id;
++----------+----------+
+| class_id | count(*) |
++----------+----------+
+|        1 |        5 |
+|        2 |        3 |
+|        3 |        2 |
++----------+----------+
+
+2)正确答案
+mysql> select class.name,count(user.id) tot  from class left join user on class.id=user.class_id group by class.id;
++--------+-----+
+| name   | tot |
++--------+-----+
+| class1 |   5 |
+| class2 |   3 |
+| class3 |   2 |
+| class4 |   0 |
++--------+-----+
+
+3)正确答案
+mysql> select class.name,count(user.id) tot  from user right join class on class.id=user.class_id group by class.id;
++--------+-----+
+| name   | tot |
++--------+-----+
+| class1 |   5 |
+| class2 |   3 |
+| class3 |   2 |
+| class4 |   0 |
++--------+-----+
+
+需求7: 查询每个用户的用户名和对应的班级名称?
+1)正确答案(内链接)
+mysql> select user.username,class.name from user inner join class on class.id=user.class_id;
++----------+--------+
+| username | name   |
++----------+--------+
+| user1    | class1 |
+| user2    | class1 |
+| user3    | class1 |
+| user4    | class1 |
+| user5    | class2 |
+| user6    | class3 |
+| user7    | class2 |
+| user8    | class1 |
+| user9    | class2 |
+| user10   | class3 |
++----------+--------+
+
+2)正确答案(普通多表查询)
+mysql> select user.username,class.name from user,class where user.class_id=class.id;
++----------+--------+
+| username | name   |
++----------+--------+
+| user1    | class1 |
+| user2    | class1 |
+| user3    | class1 |
+| user4    | class1 |
+| user5    | class2 |
+| user6    | class3 |
+| user7    | class2 |
+| user8    | class1 |
+| user9    | class2 |
+| user10   | class3 |
++----------+--------+
+
+
+
+

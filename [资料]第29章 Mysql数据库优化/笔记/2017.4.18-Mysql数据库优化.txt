@@ -1,0 +1,110 @@
+2017.4.18-Mysql数据库优化
+
+上次复习:
+----------------------------------------------
+1.查看服务器状态
+2.查看慢查询语句
+3.desc定位有问题的语句
+4.optimize优化表空间
+
+今天内容:
+----------------------------------------------
+check表检查:
+mysql> check table v_user;
+---------------------------------------------------------------------------+
+| yzmedu.v_user | check | Error    | Table 'yzmedu.class' doesn't exist
+                                                                           |
+| yzmedu.v_user | check | Error    | View 'yzmedu.v_user' references invalid table(s) or c
+olumn(s) or function(s) or definer/invoker of view lack rights to use them |
+| yzmedu.v_user | check | error    | Corrupt
+                                                                           |
+---------------------------------------------------------------------------+
+
+索引的存储分类:
+1.myisam
+1)frm 表结构
+2)myd 表数据
+3)myi 表索引
+
+2.innodb
+1)frm 表结构
+2)ibd 索引+部分表数据
+3)ibdata1 所有表共享空间
+
+复合索引:
+对于创建的多列索引，只要查询的条件中用到最左边的列，索引一般就会被使用.
+
+like关键字:
+#desc select * from user where username like 'linux%'\G
+当使用like进行搜索时，%在前索引可能会失效.
+
+null判断:
+#desc select * from user where username is null;
+当判断null值时会使用username这一列的索引.
+
+or关键字:
+#desc select * from user where username='user7' or age=15\G
+在使用or的情况下两边的索引都有可能失效.
+
+字段和值类型不同:
+#desc select * from user where username=200\G
+当条件中字段和值的类型不同时，该字段的索引可能会失效.
+
+查看索引的使用频次:
+mysql> show status like "%Handler_read%";
++-----------------------+-------+
+| Variable_name         | Value |
++-----------------------+-------+
+| Handler_read_key      | 42    |    #越大越好
+| Handler_read_rnd_next | 306   |    #越小越好
++-----------------------+-------+
+
+多表查询索引使用:
+#desc select * from t1 where class_id in(select id from class)\G
+#desc select t1.* from t1,class where t1.class_id=class.id\G
+#desc select t1.* from class left join t1 on t1.class_id=class.id\G
+目前5.7的版本中常用的多表查询都进行索引优化.
+
+Mysql服务器优化:
+1.四种字符集问题
+2.slow log慢查询日志问题
+3.root密码丢失
+
+mysql root密码破解:
+1.密码没有忘，但我要改密码
+set password=password('123');
+
+2.密码忘记了，我要破解密码
+1)关闭mysql服务
+net stop mysql57
+
+2)越过user表启动mysql
+a.越过授权表启动mysql母进程
+cd AppServ\MySQL\bin
+mysqld.exe --skip-grant-tables &
+
+b.无密码登录
+mysql -uroot 
+
+c.刷新管理员权限
+flush privileges;
+
+d.有权限后改密码
+alter user 'root'@'localhost' identified by '789';
+
+3)关闭win下任务管理器中mysqld进程
+
+4)重新启动mysql服务
+net start mysql57
+
+
+
+
+
+
+
+
+
+
+
+

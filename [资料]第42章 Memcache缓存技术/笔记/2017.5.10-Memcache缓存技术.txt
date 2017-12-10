@@ -1,0 +1,85 @@
+2017.5.10-Memcache缓存技术
+
+上次复习:
+----------------------------------------------
+1.用户模块开发
+2.分页功能
+3.分页类
+
+今天内容(Memcache):
+----------------------------------------------
+Memcache作用:
+1.数据缓存
+2.数据共享
+
+memcache的优缺:
+1.优点
+1)内存缓存
+2)速度快
+
+2.缺点
+1)关机易丢失
+2)大小受内存限制
+
+memcache和文件缓存的区别:
+1.memcache
+1)关机易丢失
+2)连接通讯
+3)速度快
+
+2.文件缓存
+1)永远存储
+2)不需要通讯
+3)速度受硬盘限制(7200)
+
+redis数据库(nosql数据库):
+#是memcache(微型数据库)+mongodb(nosql数据库)综合体
+
+常用数据缓存:
+1.文件缓存
+2.内存缓存(memcache和redis)
+3.静态缓存
+
+查看memcache启动状态:
+1.查进程
+tasklist | find "mem"
+
+2.查端口
+netstat -ano | find "50000"
+
+端口连接:
+1.dos telnet端口连接器
+2.putty端口连接器
+3.securecrt端口连接器
+
+memcache操作:
+1.增(set)
+set name1 1 3600 5(user1)
+
+2.删(delete)
+delete name1
+
+3.改(replace)
+replace name1 0 3600 4(user)
+
+4.查(get)
+get name1
+stats
+stats items
+stats cachedump 1 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

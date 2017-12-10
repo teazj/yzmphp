@@ -1,0 +1,17 @@
+1、缓存
+	// 写入缓存
+
+	    // \Cache::put("data",$data,1);
+
+	// 读取缓存
+
+	    // $data=\Cache::get('data');
+
+	// 删除缓存
+	    // \Cache::forget('data');
+
+	    // dd($data);
+
+	// 删除所有缓存
+
+	    \Cache::flush();

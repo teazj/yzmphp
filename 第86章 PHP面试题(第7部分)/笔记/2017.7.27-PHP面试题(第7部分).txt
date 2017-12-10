@@ -1,0 +1,74 @@
+2017.7.27-PHP面试题(第7部分)
+
+今天内容:
+------------------------------------------------------
+user表:
+mysql> select * from user;
++----+-------+
+| id | name  |
++----+-------+
+|  1 | user1 |
+|  2 | user2 |
+|  3 | user3 |
++----+-------+
+
+article表:
+mysql> select * from article;
++----+-----+-----------------+
+| id | uid | title           |
++----+-----+-----------------+
+|  1 |   1 | 111111111111111 |
+|  2 |   2 | 222222222222222 |
+|  3 |   1 | 333333333333333 |
+|  4 |   1 | 444444444444444 |
+|  5 |   2 | 555555555555555 |
++----+-----+-----------------+
+
+需求: 每个用户以及发表的文章总数:
+mysql> select user.name,count(*) from user left join article on user.id=article.uid group
+by user.id;
++-------+----------+
+| name  | count(*) |
++-------+----------+
+| user1 |        3 |
+| user2 |        2 |
+| user3 |        1 |
++-------+----------+
+
+需求: 用户文章总数为null的换成0来显示:
+mysql> select user.name,count(article.uid) from user left join article on user.id=article.
+uid group by user.id;
++-------+--------------------+
+| name  | count(article.uid) |
++-------+--------------------+
+| user1 |                  3 |
+| user2 |                  2 |
+| user3 |                  0 |
++-------+--------------------+
+
+数组遍历:
+1.for循环遍历
+2.while...list...each循环遍历
+3.foreach循环遍历
+
+上传8M以上的文件:
+upload_max_filesize = 8M
+post_max_size = 8M
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,116 @@
+2017-6-23 laravel 实现会话机制和版本迁移
+--------------------------------------------------------------
+上次复习
+1、连贯操作
+
+
+2、表单验证
+
+--------------------------------------------------------------
+今日学习
+1、分页效果
+	1、控制器
+		$data=\DB::table("user")->orderBy("id","desc")->paginate(10);
+
+		    // simplePaginate  简化的分页效果
+		    // paginate  正常分页效果
+		// 加载用户管理页面
+		return view('admin.user.index')->with("data",$data);
+
+	2、页面中
+		{{$data->links()}}
+
+2、引入外部验证码
+	1、把验证码文件夹拷贝到指定目录 (D:\laravel\yzmedu\yzm2\resources)
+
+	2、书写路由
+		Route::get("admin/yzm","Admin\LoginController@yzm");
+
+	3、控制器中生成验证码
+		// 引入验证码类
+		include "../resources/code/Code.class.php";
+
+		// 实例化验证码类
+
+		$code=new \Code();
+
+		// 生成验证码
+
+		$code->make();
+
+	4、获取验证码
+
+		$code->get();
+
+
+
+3、登录和退出系统
+	0、使用了中间件
+
+	1、登录
+		session(['key'=>'value']);
+	2、退出
+
+		session()->flash();
+
+
+4、数据库的迁移
+	0、数据库迁移就像是数据库的版本控制 (不建议初学者使用)
+	
+	1、创建数据库迁移
+		php artisan make:migration create_table_news
+
+		 public function up()
+		{
+		    Schema::create('news', function (Blueprint $table) {
+		        $table->increments('id');
+		        $table->string('title');
+		        $table->string('text');
+		    });
+		}
+
+		/**
+		 * Reverse the migrations.
+		 *
+		 * @return void
+		 */
+		public function down()
+		{
+		    Schema::dropIfExists('news');
+		}
+
+	2、使用迁移
+		php artisan migrate
+
+		调用迁移中的 up方法
+
+	3、返回
+		php artisan migrate:rollback
+
+		返回迁移中的 down方法
+
+5、调试工具
+	1、使用调试工具
+		在 D:\laravel\yzmedu\yzm2\config\app.php 添加一句话182行
+
+		Barryvdh\Debugbar\ServiceProvider::class,
+
+	2、安装调试助手
+		composer require barryvdh/laravel-debugbar
+
+
+6、自定义函数
+	1、新建了函数的公共目录
+
+		D:\laravel\yzmedu\yzm2\app\Common
+
+	2、修改 composer.json
+		,
+
+        "files":[
+            "app/Common/function.php"
+        ]
+
+    3、重新加载配置文件
+    	composer dump-auto
+

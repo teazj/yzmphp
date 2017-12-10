@@ -1,0 +1,65 @@
+2017.5.11-Memcache缓存
+
+上次复习:
+---------------------------------------------
+1.memcache缓存作用
+2.文件缓存
+3.静态缓存
+4.安装memcache软件
+5.简单操作memcache软件
+
+今天内容:
+---------------------------------------------
+1.操作memcache服务器(增、删、改和查)
+2.php操作memcache服务器(实现memcache缓存数据)
+
+memcache操作:
+1.增
+set name1 1 3600 5(user1)
+
+2.删
+delete name1
+
+3.改
+replace name1 0 3600 4(user)
+
+4.查
+get name1
+
+5.其他
+stats
+stats items
+stats cachedump 1 0
+
+php开启memcache模块:
+1.把php_memcache.dll拷贝到php下的ext下
+2.在php.ini中加入extension=php_memcache.dll
+3.重启apache加入新模块
+4.phpinfo中查看是否成功开启了memcache模块
+
+php操作memcache:
+1.连接
+$mem=new Memcache;
+$mem->connect("localhost","11211");
+
+2.增和改
+$mem->set('username','123');
+
+3.删(delete)
+$mem->delete('username');
+
+4.查(get)
+$mem->get('username');
+
+5.清空
+$mem->flush();
+
+6.状态
+$mem->getStats();
+
+[实例: 用户查看]
+
+[实例: 设计memcache缓存]
+
+
+

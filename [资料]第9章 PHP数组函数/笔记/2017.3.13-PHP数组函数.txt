@@ -1,0 +1,218 @@
+2017.3.13-PHP数组函数
+
+上次复习:
+---------------------------------------------
+1.数组作用
+2.数组定义
+3.数组输出
+4.数组组成
+5.数组类型
+6.数组赋值
+7.数组遍历
+8.超全局数组
+
+今天内容(数组函数):
+---------------------------------------------
+1.超全局数组
+2.数组函数
+
+超全局数组:
+1.$_GET
+2.$_POST
+3.$_REQUEST
+4.$_FILES
+5.$_SERVER
+6.$_COOKIE
+7.$_SESSION
+8.$GLOBALS
+
+超全局数组的使用:
+1.$_GET
+1)超链接
+<a href='list.php?id=10&name=user1'>列表页面</a>
+
+2)表单
+<form action="" method='get'>
+	<p>用户名:</p>	
+	<p>
+		<input type="text" name='username'>
+	</p>
+
+	<p>密码:</p>
+	<p>
+		<input type="text" name='password'>
+	</p>
+
+	<p>
+		<input type="submit" value="ok">
+		<input type="reset" value='cancel'>
+	</p>
+</form>
+
+2.$_POST
+<form action="" method='post'>
+	<p>用户名:</p>	
+	<p>
+		<input type="text" name='username'>
+	</p>
+
+	<p>密码:</p>
+	<p>
+		<input type="text" name='password'>
+	</p>
+
+	<p>
+		<input type="submit" value="ok">
+		<input type="reset" value='cancel'>
+	</p>
+</form>
+
+表单post传输数据:
+1.文本框
+<input type="text" name='username'>
+
+2.密码框
+<input type="password" name='password'>
+
+3.单选框
+<label>
+	<input type="radio" name='love' value='linux'> linux
+</label>
+
+4.多选框
+<label>
+	<input type="checkbox" name='love[]' value='linux'> linux
+</label>
+
+5.下拉菜单
+<select name="love">
+	<option value='linux'>linux</option>	
+	<option value='php'>php</option>	
+	<option value='html5'>htm5</option>	
+</select>
+
+6.多选下拉菜单
+<select name="love[]" multiple>
+	<option value='linux'>linux</option>	
+	<option value='php'>php</option>	
+	<option value='html5'>htm5</option>	
+</select>
+
+7.文本域
+<textarea name="mess"></textarea>
+
+8.隐藏框
+<input type="hidden" name='id' value='100'>
+
+9.文件框
+<form action="list.php" method='post' enctype='multipart/form-data'>
+	<input type="file" name="img">
+</form>
+
+数组函数:
+1.需求:
+1)获取数组中的value.
+function getval($arr){
+	foreach($arr as $key=>$val){
+		$row[]=$val;
+	}
+	return $row;
+}
+
+2)获取数组中的key.
+function getval($arr){
+	foreach($arr as $key=>$val){
+		$row[]=$key;
+	}
+	return $row;
+}
+
+3)把数组中的key和value对调.
+function getval($arr){
+	foreach($arr as $key=>$val){
+		$row[$val]=$key;
+	}
+	return $row;
+}
+
+4)求数组中所有值之和.
+function getval($arr){
+	foreach($arr as $key=>$val){
+		$tot+=$val;
+	}
+	return $tot;
+}
+
+5)求数组中所有值的乘积.
+function getval($arr){
+	$tot=1;
+	foreach($arr as $key=>$val){
+		$tot*=$val;
+	}
+	return $tot;
+}
+
+6)判断一个值在不在数组中.
+function getval($str,$arr){
+	foreach($arr as $key=>$val){
+		if($val==$str){
+			return true;
+		}
+	}
+}
+
+7)元素个数.
+function getval($str,$arr){
+	foreach($arr as $key=>$val){
+		$tot++;
+	}
+	return $tot;
+}
+
+8)数组值合并.
+function getval($arr,$arr2){
+	foreach($arr as $key=>$val){
+		$row[$key]=$val;
+	}
+	foreach($arr2 as $key2=>$val2){
+		$row[$key2]=$val2;
+	}
+	return $row;
+}
+
+9)数组过滤.
+function getval($arr){
+	foreach($arr as $val){
+		if($val%2==1){
+			$row[]=$val;
+		}
+	}
+	return $row;
+}
+
+10)数组键值合并.
+function getval($arr,$arr2){
+	for($i=0;$i<2;$i++){
+		$row[$arr[$i]]=$arr2[$i];
+	}
+	return $row;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

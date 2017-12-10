@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>index</title>
+
+	<style>
+		.dog{
+			width:256px;
+			height:256px;
+			background: #faa;
+			border-radius:128px;
+			overflow: hidden;
+			cursor: pointer;
+		}
+	</style>
+	<script src='jquery.min.js'></script>
+</head>
+<body>
+	<div class='dog'>
+		<img src="dog.png" alt="">	
+	</div>	
+</body>
+<script>
+$('.dog').click(function(){
+	s=0;
+	v=20;
+
+	setInterval(function(){
+		s+=v;
+		document.title=s;
+		$('.dog').find('img').attr({'src':'cai.png'}).parent().css('background','#aaf').css('transform','rotate('+s+'deg)');
+	},50);
+});
+</script>
+</html>

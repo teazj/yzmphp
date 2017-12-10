@@ -1,0 +1,105 @@
+2017.4.17-Mysql数据库优化
+
+上次复习:
+----------------------------------------------------
+1.Mysql基础操作
+1)mysql表复制
+2)mysql索引
+3)mysql视图
+4)mysql内置函数
+5)重排auto_increment值
+
+2.常用的Sql技巧
+1)正则表达式的使用
+2)巧用RAND()提取随机行
+3)mysql中help的使用
+
+今天内容:
+----------------------------------------------------
+推荐mysql书籍:
+网易专家DBA: 《深入浅出Mysql》
+
+1.SQL语句优化
+1)优化SQL语句的一般步骤
+2)索引优化
+3)check与optimize使用方法
+4)常用SQL的优化
+
+检查服务器增、删、改和查的使用频次:(本次启动以来)
+show status like "%Com_update%";
+show status like "%Com_insert%";
+show status like "%Com_select%";
+show status like "%Com_delete%";
+
+查innodb自启动以来的影响行数:
+mysql> show status like "%InnoDB_rows%";
++----------------------+-------+
+| Variable_name        | Value |
++----------------------+-------+
+| Innodb_rows_deleted  | 2     |
+| Innodb_rows_inserted | 0     |
+| Innodb_rows_read     | 105   |
+| Innodb_rows_updated  | 3     |
++----------------------+-------+
+
+定位执行效率较低的SQL语句:
+1.explain或desc定位一条sql语句的影响行数.
+mysql>desc select * from user where username='user8'\G
+*************************** 1. row ***************************
+           id: 1
+  select_type: SIMPLE
+        table: user
+   partitions: NULL
+         type: ALL
+possible_keys: NULL
+          key: NULL
+      key_len: NULL
+          ref: NULL
+         rows: 11
+     filtered: 10.00
+        Extra: Using where
+
+2.查看mysql的慢查询日志.
+1)查看慢查询日志是否开启
+show variables like "%quer%";
+
+slow_query_log  | ON
+slow_query_log_file | mysql-slow.log
+long_query_time | 10.000000
+
+2)查看慢查询的次数
+show status like "%quer%";
+Slow_queries | 0
+
+3.修改慢查询的时间(my.ini)
+long_query_time=6
+
+4.重启mysql服务器
+net stop mysql57
+net start mysql57
+
+优化表空间:
+optimize table sales;
+1.myisam表没有问题.
+2.innodb表ibdata1文件无法回收空间.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

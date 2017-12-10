@@ -1,0 +1,198 @@
+2017-6-19 laravel Ajax数据库交互技术
+-------------------------------------------------------------------
+上次复习
+
+1、数据库基本操作
+	1、增
+	DB::insert();
+	2、删
+	DB::delete();
+	3、改
+	DB::update();
+	4、查
+	DB::select();
+
+	5、事务机制
+
+2、无刷新上传
+
+
+3、无刷新删除
+
+
+
+-------------------------------------------------------------------
+今日学习
+1、图片模块
+
+2、Ajax 异步通信技术
+	优势：
+		异步通信，不会频繁刷新页面，用户友好度比较高
+		减轻数据库压力
+
+	劣势:
+		操作难度大
+
+3、无刷新删除(ajax)
+	1、JQ
+		// obj,id 接收参数
+		function del(obj,id){
+
+			// 发送ajax请求
+
+			// $.post(请求地址,传递参数,响应请求);
+			// data可以随便命名 主要接收ajax返回的数据
+
+			$.post('/admin/pic/'+id,{'id':id,'_method':'delete','_token':'{{ csrf_token() }}'},function(data){
+
+				// 判断接收的数据如果1成功 0失败
+
+				if (data) {
+
+					// 移除对应删除的数据
+
+					$(obj).parent().parent().remove();
+
+					// 获取总数条数
+					tot=Number($("#tot").html());
+
+					// 修改总数据条数
+					$("#tot").html(--tot);
+
+				}else{
+					alert('删除失败');
+				}
+
+			});
+		}
+
+	2、控制器
+		public function destroy(Request $request){
+			// 获取删除ID
+
+			$id=$request->input('id');
+
+			// 查巡图片 
+			$data=\DB::select("select * from pic where id=$id");
+
+			// 删除操作
+			// 删除成功 返回值1
+			// 删除失败 返回值0
+
+
+			if (\DB::delete("delete from pic where id=$id")) {
+				# code...
+
+				// 删除成功 删除图片
+				unlink("./Uploads/Goods/{$data[0]->img}");
+				return "1";
+			}else{
+				return "0";
+			}
+
+		}
+
+
+
+4、无刷新批量删除(ajax)
+	1、JQ
+		// 批量删除方法
+
+		function delAll(){
+			// 获取被选中数据的值
+			var arr=[];
+			// 获取所有的数据 并且是被选中的
+			inputs=$(".inputs:checked");
+			// 获取选中数据的value值
+			for (var i = inputs.length - 1; i >= 0; i--) {
+				// 把值压入到数组
+				arr.push(inputs.eq(i).val());
+			};
+			// 把arr转换成字符串
+			str=arr.join(',');
+			// 发送ajax请求
+			$.post('/admin/pic/delAll',{'str':str,'_token':'{{csrf_token()}}'},function(data){
+				// 判断数据是否删除成功
+				if (data==arr.length) {
+					// 移除对应的数据
+					for (var i = arr.length - 1; i >= 0; i--) {
+						$("#tr"+arr[i]).remove();
+					};
+					// 修改数据个数
+					tot=Number($("#tot").html())-Number(data);
+					$("#tot").html(tot);
+				}else{
+					alert('删除失败');
+				}
+			});
+
+		}
+
+	2、控制器
+		public function delAll(Request $request){
+
+			$str=$request->input('str');
+
+			$data=\DB::select("select * from pic where id in($str)");
+
+			// 执行删除语句
+
+			if ($a=\DB::delete("delete from pic where id in($str)")) {
+				# code...
+				// 删除图片
+				foreach ($data as $value) {
+					unlink("./Uploads/Goods/{$value->img}");
+				}
+				return $a;
+			}else{
+				return 0;
+			}
+		}
+
+5、无刷新排序(ajax)
+	1、JQ
+
+		// 无刷新排序
+
+		function change(obj,id){
+			// 获取ID
+
+			// 获取用户修改的值
+
+			val=$(obj).val();
+
+			// 发送ajax请求
+
+			$.post('/admin/pic/sort',{'id':id,'val':val,'_token':'{{csrf_token()}}'},function(data){
+
+				// 判断师傅修改成功
+				if (data==1) {
+					// 页面自动刷新
+					window.location.reload();
+				}else{
+					alert('修改失败');
+				}
+
+			});
+		}
+
+	2、控制器
+		public function sort(Request $request){
+			// 修改数据库
+
+			if (\DB::update("update pic set sort={$request->input('val')} where id={$request->input('id')}")) {
+				# code...
+
+				echo "1";
+			}else{
+				echo 0;
+			}
+		}
+
+6、ajax使用实例
+	[百度搜索 提示关联词]
+	[加载更多]
+	[瀑布流]
+
+
+

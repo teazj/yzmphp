@@ -1,0 +1,296 @@
+2017-6-12 laravel 的配置及路由
+===============================================================================
+上次复习
+1、composer安装
+
+
+2、laravel的安装
+
+
+3、MVC模式
+	M model  数据模型
+
+	V view   视图
+
+	C Controller  控制器
+
+4、了解laravel的运行模式
+	
+
+
+5、使用laravel开发用户展示列表
+	1、配置数据库
+
+	2、修改路由
+
+	3、书写控制器
+
+	4、书写页面
+
+6、目录结构
+
+
+===============================================================================
+今日学习
+1、配置文件
+	1、环境配置 (D:\laravel\yzmedu\yzm2\.env)
+		1.1 环境配置解析 APP_KEY  网站的密匙
+			php artisan key:generate
+
+		1.2 APP_DEBUG 默认(true)
+			网站开发时候可以开启(true) 如果网站上线 必须把开发模式关闭(false)
+
+		1.3 获取环境配置信息
+			env('APP_DEBUG');
+			env('APP_DEBUG',false); //如果环境配置中未设置APP_DEBUG 采用默认值false
+
+
+		1.4 设置自定义环境变量
+			1) (D:\laravel\yzmedu\yzm2\.env)
+				DB_PREDIX=blog_
+
+			2) 使用
+				env('DB_PREDIX');
+
+
+	2、系统配置 (D:\laravel\yzmedu\yzm2\config)
+		1.1 读取配置
+			// 读取 系统配置中的时区
+			// dd(Config('app.timezone'));
+			// 读取 邮件配置中的端口
+			// dd(Config('mail.port'));
+
+		1.2 修改配置
+			Config(['app.timezone'=>'UTC']);
+
+
+
+
+2、php artisan (PHP工具匠)
+	1) 简介
+		php artisan (PHP工具匠)，其实本身就是一些PHP文件，咱们可以在命令行下执行这些php文件
+
+		可以完成 创建控制器、创建中间件、生成密匙等
+	2) 网站下线
+		php artisan down
+
+	3) 网站下线默认展示页面
+		D:\laravel\yzmedu\yzm2\resources\views\errors\503.blade.php
+
+	4) 网站上线
+		php artisan up
+
+	5) 查看路由列表
+		php artisan route:list
+
+
+3、路由
+	1、基本路由
+		1) 直接输出内容(使用很少)
+			Route::get('jiben',function(){
+				echo "我是基本路由";
+			});
+
+		2) 加载页面(使用比较少)
+
+			Route::get('jiben1',function(){
+				return view('home');
+			});
+
+			#需要手动创建 D:\laravel\yzmedu\yzm2\resources\views\home.blade.php
+
+		3) 加载控制器
+
+			Route::get('jiben2',"JibenController@index");
+			Route::get('jiben3',"Jiben1Controller@index");
+
+		4) 创建控制器
+			1、手动创建
+				需要将已有控制器复制一份，进行重命名，一定注意文件名必须和类名相同
+
+
+			2、atrisan 创建
+				php artisan make:controller IndexController;
+
+	2、路由类型
+		1、类型
+			Route::get($uri, $callback);
+			Route::post($uri, $callback);
+			Route::put($uri, $callback);
+			Route::patch($uri, $callback);
+			Route::delete($uri, $callback);
+			Route::options($uri, $callback);
+
+		2、get
+			// 登陆页面
+			Route::get('login',"LoginController@index");
+
+		3、post
+			// 处理登录操作
+			Route::post('check',"LoginController@check");
+
+		4、put
+			路由中书写
+				// put请求
+
+				Route::get('putWeb','LoginController@putWeb');
+
+				// put的处理页面
+				Route::put('put','LoginController@put');
+
+			控制器书写
+				// put请求页面
+
+				public function putWeb(){
+
+					return view('putWeb');
+				}
+
+				// put请求处理页面
+				public function put(Request $request){
+					dd($request->input());
+				}
+
+
+			请求页面书写
+				<form action="put" method="post">
+				    <p>
+				        {{csrf_field()}}
+
+				        <input type="hidden" name="_method" value="put">
+				        User:
+				        <input type="text" name="user" id="">
+				    </p>
+				</form>
+
+		5、CSRF 保护 保护表单安全
+			Laravel 提供简单的方法保护你的应用不受到 跨站请求伪造 (CSRF) 攻击。跨站请求伪造是一种恶意的攻击，它利用已通过身份验证的用户身份来运行未经授权的命令。
+
+			{{csrf_field()}}
+
+	3、一个路由实现多种请求
+
+		1、match
+			Route::match(['get','post'],'/',"IndexController@index");
+
+		2、any
+			Route::any('/',"IndexController@index");
+
+	4、资源路由
+		1、实例
+			后台拥有很多模块，用户模块、管理模块等(增、删、改、查)
+			Route::get('user/index','UserController@index');
+			Route::get('user/add','UserController@add');
+			Route::get('user/edit','UserController@edit');
+			Route::post('user/insert','UserController@insert');
+			Route::post('user/update','UserController@update');
+			Route::get('user/del','UserController@del');
+
+		2、资源路由
+
+			Route::resource('Admin','IndexController');
+
+
+						
+			| GET|HEAD  | Admin              | Admin.index   | App\Http\Controllers\IndexController@index   | web          | #展示页面
+
+			| POST      | Admin              | Admin.store   | App\Http\Controllers\IndexController@store   | web          | #添加操作
+
+			| GET|HEAD  | Admin/create       | Admin.create  | App\Http\Controllers\IndexController@create  | web          | #添加页面
+
+			| DELETE    | Admin/{Admin}      | Admin.destroy | App\Http\Controllers\IndexController@destroy | web          | #删除操作
+
+			| PUT|PATCH | Admin/{Admin}      | Admin.update  | 
+			App\Http\Controllers\IndexController@update  | web          | #更新操作
+
+			| GET|HEAD  | Admin/{Admin}      | Admin.show    | App\Http\Controllers\IndexController@show    | web          |
+
+			| GET|HEAD  | Admin/{Admin}/edit | Admin.edit    | App\Http\Controllers\IndexController@edit    | web          | #修改页面
+
+			| GET|HEAD  | api/user           |               | Closure                                      | api,auth:api |
+
+
+	5、参数路由
+		1、带参数路由
+			Route::get('user/del/{id}',function($id){
+
+				echo $id;
+			});
+
+		2、带多个参数的路由
+
+			Route::get('UserInfo/{name}/{sex}',function($name,$sex){
+				echo $name;
+
+				echo $sex;
+			});
+
+		3、设置路由的默认值
+
+			Route::get('user/edit/{id?}',function($id="默认值"){
+				echo $id;
+			});
+
+
+		4、带参数访问的到控制器
+			Route::get('UserInfo/{name}/{sex}',"IndexController@UserInfo");
+
+
+		    // 新建UserInfo
+		    public function UserInfo($a,$sex1){
+		        var_dump($a);
+		        var_dump($sex1);
+		    }
+
+	6、命名路由
+		Route::get('abc',"IndexController@abc")->name('one');
+
+		#获取别名的url地址
+
+		route('one');
+
+		#通过命名路由实现重定向
+		return redirect()->route('one');
+
+
+
+	7、路由组
+
+		1、中间件
+
+
+		2、命名空间
+			Route::group(['namespace'=>'Admin'],function(){
+				Route::get('admin','IndexController@index');
+				Route::get('admin/user','UserController@index');
+				Route::get('admin/goods','GoodsController@index');
+			});
+
+			Route::group(['namespace'=>'Home'],function(){
+				Route::get('/','IndexController@index');
+			});
+			#需要在控制器目录下新建Admin目录和Home目录 在目录中新建控制器
+			#注意 需要修改命名空间
+
+			<?php
+
+				namespace App\Http\Controllers\Admin;
+
+				use Illuminate\Http\Request;
+
+				use DB;
+
+				use App\Http\Controllers\Controller;
+
+				class UserController extends Controller
+				{
+				    //index 方法
+
+				    public function index(){
+				    	
+				        echo "我是后台控制器User";
+				    }
+				    
+				}
+
+

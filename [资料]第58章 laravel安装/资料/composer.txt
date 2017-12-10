@@ -1,0 +1,30 @@
+﻿1、查看是否安装
+
+	composer
+
+2、安装软件
+{
+	"require":{
+		"monolog/monolog":"1.19.0"
+	}
+}
+2、修改国内镜像
+	composer config -g repo.packagist composer https://packagist.phpcomposer.com
+
+3、安装最新的laravel
+
+	composer global require "laravel/installer"
+
+	laravel new blog
+
+4、安装laravel 5.3
+
+	composer create-project laravel/laravel your-project-name --prefer-dist "5.3.*"
+
+5、查看安装的版本
+	a、到达项目目录
+
+	b、使用命令
+		D:\laravel\object\yzm2>php artisan -V
+		D:\laravel\object\yzm2>php artisan --version
+		Laravel Framework version 5.3.31

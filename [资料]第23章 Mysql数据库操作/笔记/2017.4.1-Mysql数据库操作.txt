@@ -1,0 +1,161 @@
+2017.4.1-Mysql数据库操作
+
+上次复习:
+-----------------------------------------------------
+1.字段类型
+2.字段属性
+
+今天内容:
+-----------------------------------------------------
+1.字段管理
+2.索引管理
+3.数据库操作
+
+字段管理:
+1.添加字段
+alter table user add age tinyint unsigned not null;
+alter table user add pass varchar(30) not null after user;
+alter table user add pass varchar(30) not null first;
+
+2.删除字段
+alter table user drop password;
+
+3.修改字段
+alter table user modify username varchar(30) not null;
+alter table user change username user varchar(30) not null;
+
+4.查看字段
+desc user;
+
+索引:
+1.主键
+1)添加
+mysql> create table user2(
+    -> id int unsigned not null auto_increment,
+    -> username varchar(30) not null,
+    -> primary key(id)
+    -> );
+
+mysql> create table user2(
+    -> id int unsigned not null auto_increment primary key,
+    -> username varchar(30) not null
+    -> );
+
+2)删除
+alter table user2 modify id int unsigned not null;
+alter table user2 drop primary key;
+
+2.唯一
+1)添加
+alter table user2 add unique u_username(username);
+
+2)删除
+alter table user2 drop index u_username;
+
+3.普通
+1)添加
+alter table user2 add index i_username(username);
+
+2)删除
+alter table user2 drop index i_username;
+
+数据库操作:
+1.DCL 数据控制语言
+1)grant
+2)commit
+3)rollback
+
+2.DDL 数据定义语言
+1)create
+2)drop
+3)alter
+
+3.DML 数据操作语言
+1)insert
+2)delete
+3)update
+
+4.DQL 数据查询语言
+1)select
+
+
+创建表语句:
+mysql> create table user(
+    -> id int unsigned auto_increment primary key,
+    -> username varchar(50) not null,
+    -> password varchar(50) not null
+    -> );
+
+表结构:
+mysql> desc user;
++----------+------------------+------+-----+---------+----------------+
+| Field    | Type             | Null | Key | Default | Extra          |
++----------+------------------+------+-----+---------+----------------+
+| id       | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| username | varchar(50)      | NO   |     | NULL    |                |
+| password | varchar(50)      | NO   |     | NULL    |                |
++----------+------------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+判断sql语句的检索效率:
+desc select * from user where id=5;
+
+增-insert:
+insert into user(username,password) values('user1','123');
+
+删-delete:
+delete from user where id=5;
+
+改-update:
+update user set password='123' where id=2;
+update user set username='user33',password='123' where id=3;
+
+查-select:
+select * from user;
+#查询表中所有字段以及每个字段所对应的所有记录
+
+where条件:
+1.id>3
+select * from user where id>3;
+
+2.id>=3
+select * from user where id>=3;
+
+3.id<3;
+select * from user where id<3;
+
+4.id<=3;
+select * from user where id<=3;
+
+5.id>3 and id<7
+select * from user where id>3 and id<7;
+
+6.id>=3 and id<=7
+select * from user where id>=3 and id<=7;
+
+7.between 3 and 7
+select * from user where id between 3 and 7;
+
+8.id=3 or id=5 or id=6 or id=10
+select * from user where id=3 or id=5 or id=6 or id=10;
+
+9.in(3,5,6,10)
+select * from user where id in(3,5,6,10);
+
+10.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

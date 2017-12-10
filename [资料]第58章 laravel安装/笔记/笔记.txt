@@ -1,0 +1,209 @@
+2017-6-8 laravel安装
+===========================================================
+上次复习
+1、SVN团队开发工具
+
+
+2、数据库授权
+
+
+3、iptable 防火墙
+
+
+4、代码安全检测
+
+
+
+===========================================================
+今日学习
+1、框架
+	提供了一些主体功能，方便开发者快速开发
+
+
+2、PHP框架
+	laravel
+		(laravel 5.3版本)
+
+	ThinkPHP
+		(ThinkPHP 3.2.3)
+		(ThinkPHP 5)
+
+
+
+3、composer软件
+	1、作用
+		主要管理PHP中的依赖关系，(类似与Linux yum源)
+
+	2、可以安装软件
+		CURL     #主要用在微信开发
+		Upload   #文件操作
+		excel    #表格
+		mail     #邮件
+		log      #日志
+		laravel  #框架
+
+	3、下载地址
+		https://getcomposer.org/
+
+	4、安装
+		默认安装，需要勾选php启动程序
+
+	5、检测是否安装成功
+
+		命令行： composer
+
+4、通过composer 安装软件
+	1、切换到指定目录 新建 composer.json
+
+	2、编辑文件
+		{
+		    "require":{
+		        "monolog/monolog": "1.20.0"
+		    }
+		}
+
+	3、执行命令
+		composer install
+
+
+5、安装laravel
+	0、修改镜像地址
+
+		composer config -g repo.packagist composer https://packagist.phpcomposer.com
+	1、laravel的安装要求
+		PHP >= 5.6.4
+		OpenSSL PHP Extension
+		PDO PHP Extension
+		Mbstring PHP Extension
+		Tokenizer PHP Extension
+		XML PHP Extension
+
+	2、安装最新版本laravel
+		composer global require "laravel/installer"
+		laravel new yzm
+
+	3、安装5.3版本
+		composer create-project laravel/laravel yzm2 --prefer-dist "5.3.*"
+
+	4、查看laravel 版本
+		php artisan -V
+		php artisan --version
+
+	5、配置虚拟主机
+		1、修改本地DNS路由表
+			配置了 www.yzmedu1.com www.yzmedu2.com
+
+		2、修改apache (larval的网站根目录 在Public 下)
+			修改httpd.conf
+			Include conf/extra/httpd-vhosts.conf
+
+			修改 httpd-vhosts.conf
+			<VirtualHost *:80>
+			    DocumentRoot "D:/laravel/yzmedu/yzm/public"
+			    ServerName www.yzmedu1.com
+			    <Directory "D:/laravel/yzmedu/yzm/public">
+			        
+			        Options Indexes FollowSymLinks
+
+			        AllowOverride All
+
+			        Require all granted
+			    </Directory>
+			</VirtualHost>
+
+		3、重启服务
+
+	6、地址栏访问
+
+		www.yzmedu1.com
+		www.yzmedu2.com
+
+
+		如果出现 laravel 就安装成功
+
+
+6、目录了解
+	app       应用的核心代码
+	bootstrap 框架自动加载文件
+	config    配置文件
+	database  数据库迁移
+	public    网站主入口和前端资源
+	resources 界面文件
+	routes    路由目录
+	storage   临时文件
+	test      自动化测试目录
+	vendor    composer依赖包
+
+7、laravel开发一个用户展示页面
+	1、框架链接数据库（D:\laravel\yzmedu\yzm2\.env）  修复配置文件
+		DB_CONNECTION=mysql
+		DB_HOST=127.0.0.1
+		DB_PORT=3306
+		DB_DATABASE=yzm
+		DB_USERNAME=root
+		DB_PASSWORD=123
+
+	2、设置路由 (D:\laravel\yzmedu\yzm2\routes\web.php);  设置路由
+		Route::get('/user',"IndexController@index");
+
+	3、切换到网站根目录
+		执行命令
+		php artisan make:controller IndexController
+
+	4、打开控制器 （D:\laravel\yzmedu\yzm2\app\Http\Controllers\IndexController.php）  操作控制器
+		<?php
+
+		namespace App\Http\Controllers;
+
+		use Illuminate\Http\Request;
+
+		use DB;
+
+		class IndexController extends Controller
+		{
+		    //index 方法
+
+		    public function index(){
+		    	// echo "找呀找呀 终于找到了控制器";
+
+		    	$data=DB::table('user')->get();
+
+		    	return view('user')->with("data",$data);
+		    }
+		}
+
+	5、需要新建页面 （D:\laravel\yzmedu\yzm2\resources\views\user.blade.php） (页面) 页面
+
+        @foreach($data as $value)
+        <tr>
+            <td>{{$value->id}}</td>
+            <td>{{$value->name}}</td>
+            <td>{{$value->pass}}</td>
+            <td>{{$value->statu}}</td>
+            <td>{{$value->time}}</td>
+        </tr>
+
+        @endforeach
+
+
+8、MVC模式
+	M  model  数据模型
+		D:\laravel\yzmedu\yzm2\app\User.php
+
+	V  view  视图
+		D:\laravel\yzmedu\yzm2\resources\views
+
+	C  controller  控制器
+		D:\laravel\yzmedu\yzm2\app\Http\Controllers
+
+
+
+
+
+
+
+
+
+
+
+

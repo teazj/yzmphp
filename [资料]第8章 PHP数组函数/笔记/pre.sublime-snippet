@@ -1,0 +1,10 @@
+<snippet>
+    <content><![CDATA[
+echo '<pre>';
+print_r(${1:\$arr});
+echo '</pre>';
+]]></content>
+    <tabTrigger>pre</tabTrigger>
+    <scope>source.php</scope>
+    <description>for …</description>
+</snippet>

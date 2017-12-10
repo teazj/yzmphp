@@ -1,0 +1,102 @@
+2017.5.18-Linux安装和常用命令
+
+上次复习:
+---------------------------------------------
+1.session登录和退出实例
+2.linux系统安装
+
+
+今天内容:
+---------------------------------------------
+1.linux系统安装
+2.linux常用命令
+
+linux系统安装:
+1.网卡
+手动配置:192.168.100.1/24
+主机名:localhost
+
+2.软件包定制
+development -> development tools
+
+3.关闭iptables防火墙
+
+4.禁掉selinux防火墙
+
+5.登录用户:
+用户:root
+密码:kkkkkk
+
+配置linux网卡:
+1.设置虚拟机网卡模式
+桥接(bridges)
+
+2.设置linux网卡
+vi /etc/sysconfig/network-scripts/ifcfg-eth0
+BOOTPROTO=dhcp
+
+3.重启linux网卡
+service network restart
+
+测试环境下:
+1.linux和win下把网卡模式都调成vmnet1
+
+2.linux下网卡ip
+192.168.20.1/255.255.255.0
+
+3.win下网卡ip
+192.168.20.2/255.255.255.0
+
+查看ip地址:
+ifconfig
+
+两台电脑测通:
+ping 192.168.20.1
+
+强制性终止linux程序:
+ctrl+c
+
+设置linux启动级别(字符界面启动)
+vi /etc/inittab
+0 关机
+3 字符界面
+5 图形界面
+6 重启
+#id:3:initdefault:
+
+系统关机:
+init 0
+
+系统重启:
+init 6
+
+查看历史:
+history
+
+清空历史:
+history -c
+
+清空屏幕:
+clear(ctrl+c)
+
+远程登录:
+1.putty
+2.securecrt
+3.xshell
+
+远程传输:
+1.winscp
+
+#系统安装调试完后记得制作快照.
+
+
+
+
+
+
+
+
+
+
+
+
